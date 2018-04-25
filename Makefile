@@ -16,7 +16,7 @@ TOPDIR					= $(realpath .)
 
 LIBCORE_CHECK_SRCDIR		= check/core
 LIBCORE_CHECK_PROGRAM		= core.check$(EXEEXT)
-LIBCORE_CHECK_INCLUDES		= -Icheck/core -Isrc/core
+LIBCORE_CHECK_INCLUDES		= -Icheck/core -Isrc/core -Icheck
 
 LIBCORE_SRCDIR			= src/core
 LIBCORE_SHARED			= libcore$(DYNLIBEXT)
@@ -55,7 +55,7 @@ SRCFILES				= $(foreach dir, $(call SRCDIRS, $(1)), $(wildcard $(dir)/*.c))
 # Setup the Defines
 DEFINES					+= -D_REENTRANT -DFORTIFY_SOURCE=2 -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DHAVE_NS_TYPE -DCORE_BUILD=$(LIBCORE_VERSION) -DCORE_STAMP=$(LIBCORE_TIMESTAMP)
 
-INCLUDES				= -Ilib/local/include -I/usr/include -Isrc
+INCLUDES				= -Ilib/local/include -I/usr/include -Isrc -Icheck/core -Isrc/core -Icheck
 WARNINGS				= -Wfatal-errors -Werror -Wall -Wextra -Wformat-security -Warray-bounds  -Wformat=2 -Wno-format-nonliteral
 
 # Compiler Parameters
