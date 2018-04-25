@@ -13,6 +13,7 @@
  * @return	This function returns no value.
  */
 void inx_cursor_reset(inx_cursor_t *cursor) {
+
 	if (cursor && cursor->inx && cursor->inx->cursor_reset) {
 		cursor->inx->cursor_reset(cursor);
 	}
