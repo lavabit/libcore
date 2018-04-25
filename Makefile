@@ -55,28 +55,36 @@ SRCFILES				= $(foreach dir, $(call SRCDIRS, $(1)), $(wildcard $(dir)/*.c))
 # Setup the Defines
 DEFINES					+= -D_REENTRANT -DFORTIFY_SOURCE=2 -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DHAVE_NS_TYPE -DCORE_BUILD=$(LIBCORE_VERSION) -DCORE_STAMP=$(LIBCORE_TIMESTAMP)
 
-INCLUDES				= -Ilib/local/include -I/usr/include
+INCLUDES				= -Ilib/local/include -I/usr/include -Isrc
 WARNINGS				= -Wfatal-errors -Werror -Wall -Wextra -Wformat-security -Warray-bounds  -Wformat=2 -Wno-format-nonliteral
 
-# C Compiler
-CC						= gcc
-CFLAGS					= $(DEFINES) $(WARNINGS) -std=gnu99 -O0 -ggdb3 -rdynamic -fPIC -c -MMD
+# Compiler Parameters
+CC								= gcc
+CFLAGS							= -std=gnu99 -O0 -fPIC -fmessage-length=0 -ggdb3 -rdynamic -c $(CFLAGS_WARNINGS) -MMD 
+CFLAGS_WARNINGS					= -Wall -Werror -Winline -Wformat-security -Warray-bounds #-Wfatal-errors
+CFLAGS_PEDANTIC					= -Wextra -Wpacked -Wunreachable-code -Wformat=2
 
-# CPP Compiler
-CPP						= g++
-CPPFLAGS				= -std=c++0x $(WARNINGS) -Wno-unused-parameter $(DEFINES) -DGTEST_TAP_PRINT_TO_STDOUT -DGTEST_HAS_PTHREAD=1 -pthread -g3
+CPP								= g++
+CPPFLAGS						= -std=c++0x $(CPPFLAGS_WARNINGS) -Wno-unused-parameter -pthread -g3 
+CPPFLAGS_WARNINGS				= -Werror -Wall -Wextra -Wformat=2 -Wwrite-strings -Wno-format-nonliteral #-Wfatal-errors
 
-# Linker
-LD						= gcc
-LDFLAGS					= -rdynamic
+# Linker Parameters
+LD								= gcc
+LDFLAGS							= -rdynamic
 
 # Archiver Parameters
-AR						= ar
-ARFLAGS					= rcs
+AR								= ar
+ARFLAGS							= rcs
 
 # Strip Parameters
-STRIP					= strip
-STRIPFLAGS				= --strip-debug
+STRIP							= strip
+STRIPFLAGS						= --strip-debug
+
+# GProf Parameters
+GPROF							= -pg -finstrument-functions -fprofile-arcs -ftest-coverage
+
+# PProf Parameters
+PPROF							= -lprofiler
 
 # Other External programs
 MV						= mv --force
