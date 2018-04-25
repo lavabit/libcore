@@ -6,4 +6,6 @@
  src/core/buckets/buckets.h src/core/parsers/parsers.h \
  src/core/parsers/numbers/numbers.h src/core/parsers/formats/formats.h \
  src/core/parsers/special/special.h src/core/checksum/checksum.h \
- src/core/host/host.h
+ src/core/host/host.h src/engine/status/status.h \
+ src/providers/cryptography/cryptography.h src/engine/log/log.h \
+ src/engine/context/context.h
