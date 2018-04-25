@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/parsers/bitwise.c
+ * @file /magma/core/parsers/bitwise.c
  *
  * @brief	Functions capable of performing binary arithmetic on managed strings.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Perform bitwise operation on two input strings.

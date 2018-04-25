@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/thread/rwlock.c
+ * @file /magma/core/thread/rwlock.c
  *
  * @brief	Functions for thread coordination via a read/write lock.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Initialize a pthread read/write lock.

@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/classify/classify.h
+ * @file /magma/core/classify/classify.h
  *
  * @brief	Functions used to classify characters into specific classes.
  */

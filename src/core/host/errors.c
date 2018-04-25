@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/src/core/host/errors.c
+ * @file /magma/src/core/host/errors.c
  *
  * @brief	Functions to help handle errno.
  */
 
-#include "core.h"
+#include "magma.h"
 
 #ifdef EPERM
  #define MAGMA_EPERM EPERM

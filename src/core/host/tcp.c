@@ -1,12 +1,14 @@
 
 /**
- * @file /libcore/src/core/host/tcp.c
+ * @file /magma/src/core/host/tcp.c
  *
  * @brief Generic fuctions for interaction with TCP/IP socket connections.
  *
  */
 
-#include "core.h"
+#include "magma.h"
+
+
 
 /**
  * @brief Determine whether the error is a permanent/fatal failure, or a transient error.
@@ -85,10 +87,13 @@ int tcp_continue(int sockd, int result, int syserror) {
 	chr_t *message = MEMORYBUF(1024);
 
 	// Check that the daemon hasn't initiated a shutdown.
+	//TODO better def
+#ifdef MAGMA_H
 	if (!status()) return -1;
-
+	else
+#endif
 	// Data was processed, so there is no need to retry the operation.
-	else if (result > 0) return result;
+	 if (result > 0) return result;
 
 	// Handle non-errors.
 	else if (result <= 0 && (syserror == 0 || syserror == EWOULDBLOCK || syserror == EAGAIN || syserror == EINTR)) return 0;

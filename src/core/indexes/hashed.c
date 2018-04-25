@@ -1,12 +1,13 @@
 
 /**
- * @file /libcore/core/indexes/hashed.c
+ * @file /magma/core/indexes/hashed.c
  *
  * @brief	Function declarations and types for the hashed list.
  */
 
-#include "core.h"
+#include "magma.h"
 
+//TODO
 #define MAGMA_HASHED_BUCKETS 1024
 
 // Hashed lists.

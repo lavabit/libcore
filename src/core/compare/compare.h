@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/compare/compare.h
+ * @file /magma/core/compare/compare.h
  *
  * @brief	Function declarations for various data and string comparison functions.
  */

@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/compare/starts.c
+ * @file /magma/core/compare/starts.c
  *
  * @brief	Functions used to compare the starts of strings with other strings.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Perform a case-sensitive check to see if one string starts with another.

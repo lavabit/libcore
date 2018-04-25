@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/encodings/url.c
+ * @file /magma/core/encodings/url.c
  *
  * @brief	Functions used to encode and decode website URLs.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Determine whether a given character is a valid character in a URL.

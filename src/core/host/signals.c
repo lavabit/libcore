@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/src/core/host/signals.c
+ * @file /magma/src/core/host/signals.c
  *
  * @brief 	Functions to help handle signals.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Translate a numeric signal into a human readable name.

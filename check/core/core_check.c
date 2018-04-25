@@ -1,343 +1,962 @@
 
 /**
- * @file /check/magma/magma_check.c
+ * @file /check/magma/core/core_check.c
  *
- * @brief	The unit test executable entry point.
+ * @brief The heart of the suite of unit tests for the Magma core module.
  */
 
 #include "magma_check.h"
 
-int_t case_timeout = RUN_TEST_CASE_TIMEOUT;
-bool_t do_virus_check = true, do_tank_check = true, do_dspam_check = true, do_spf_check = true;
-chr_t *barrister_unit_test = NULL;
+START_TEST(check_bsearch) {
 
-/**
- * @brief Enable the log so we can print status information. We're only concerned with whether the
-		test passed or failed. The actual error message will be recorded by the check library, and
-		then printed en masse when all the test cases have concluded.
- * @param test	The NULL terminated string showing the suite, test, and threading information.
- * @param error	The error string, which should be NULL if the test was skipped, or if the test passed.
- */
-void log_test(chr_t *test, stringer_t *error) {
+	log_disable();
+	bool_t result = true;
+	stringer_t *errmsg = NULL;
 
-	log_enable();
+	if (!check_bsearch_months(1, "jan") ||
+		!check_bsearch_months(2, "feb") ||
+		!check_bsearch_months(3, "mar") ||
+		!check_bsearch_months(4, "apr") ||
+		!check_bsearch_months(5, "may") ||
+		!check_bsearch_months(6, "jun") ||
+		!check_bsearch_months(7, "jul") ||
+		!check_bsearch_months(8, "aug") ||
+		!check_bsearch_months(9, "sep") ||
+		!check_bsearch_months(10, "oct") ||
+		!check_bsearch_months(11, "nov") ||
+		!check_bsearch_months(12, "dec") ||
 
-	if (!status() || (st_populated(error) && !st_cmp_ci_eq(NULLER("SKIPPED"), error))) {
-		log_unit("%-64.64s%s%10.10s%s\n", test, color_yellow_bold(), "SKIPPED", color_reset());
+		check_bsearch_months(1, "january") ||
+		check_bsearch_months(2, "february") ||
+		check_bsearch_months(3, "march") ||
+		check_bsearch_months(4, "april") ||
+		check_bsearch_months(5, "mayil") ||
+		check_bsearch_months(6, "june") ||
+		check_bsearch_months(7, "july") ||
+		check_bsearch_months(8, "august") ||
+		check_bsearch_months(9, "september") ||
+		check_bsearch_months(10, "october") ||
+		check_bsearch_months(11, "november") ||
+		check_bsearch_months(12, "december")) {
+		errmsg = NULLER("bsearch() failed");
+		result = false;
 	}
-	else if (st_populated(error)) {
-		log_unit("%-64.64s%s%10.10s%s\n", test, color_red_bold(), "FAILED", color_reset());
+
+	log_test("CORE / STRINGS / BSEARCH / SINGLE THREADED:", errmsg);
+	ck_assert_msg(result, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_compare) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	log_unit("%-64.64s", "CORE / STRINGS / COMPARE / SINGLE THREADED:");
+
+	if (st_cmp_cs_eq(NULLER(type(M_TYPE_MULTI)), CONSTANT("M_TYPE_MULTI")))
+		errmsg = NULLER("type() did not return M_TYPE_MULTI");
+
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_ENUM)), CONSTANT("M_TYPE_ENUM")))
+		errmsg = NULLER("type() did not return M_TYPE_ENUM");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_BOOLEAN)), CONSTANT("M_TYPE_BOOLEAN")))
+		errmsg = NULLER("type() did not return M_TYPE_BOOLEAN");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_BLOCK)), CONSTANT("M_TYPE_BLOCK")))
+		errmsg = NULLER("type() did not return M_TYPE_BLOCK");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_NULLER)), CONSTANT("M_TYPE_NULLER")))
+		errmsg = NULLER("type() did not return M_TYPE_NULLER");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_PLACER)), CONSTANT("M_TYPE_PLACER")))
+		errmsg = NULLER("type() did not return M_TYPE_PLACER");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_STRINGER)), CONSTANT("M_TYPE_STRINGER")))
+		errmsg = NULLER("type() did not return M_TYPE_STRINGER");
+
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_INT8)), CONSTANT("M_TYPE_INT8")))
+		errmsg = NULLER("type() did not return M_TYPE_INT8");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_INT16)), CONSTANT("M_TYPE_INT16")))
+		errmsg = NULLER("type() did not return M_TYPE_INT16");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_INT32)), CONSTANT("M_TYPE_INT32")))
+		errmsg = NULLER("type() did not return M_TYPE_INT32");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_INT64)), CONSTANT("M_TYPE_INT64")))
+		errmsg = NULLER("type() did not return M_TYPE_INT64");
+
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_UINT8)), CONSTANT("M_TYPE_UINT8")))
+		errmsg = NULLER("type() did not return M_TYPE_UINT8");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_UINT16)), CONSTANT("M_TYPE_UINT16")))
+		errmsg = NULLER("type() did not return M_TYPE_UINT16");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_UINT32)), CONSTANT("M_TYPE_UINT32")))
+		errmsg = NULLER("type() did not return M_TYPE_UINT32");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_UINT64)), CONSTANT("M_TYPE_UINT64")))
+		errmsg = NULLER("type() did not return M_TYPE_UINT64");
+
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_FLOAT)), CONSTANT("M_TYPE_FLOAT")))
+		errmsg = NULLER("type() did not return M_TYPE_FLOAT");
+	else if (st_cmp_cs_eq(NULLER(type(M_TYPE_DOUBLE)), CONSTANT("M_TYPE_DOUBLE")))
+		errmsg = NULLER("type() did not return M_TYPE_DOUBLE");
+
+	log_test("CORE / STRINGS / COMPARE / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_inx_linked_s) {
+
+	log_disable();
+	char *errmsg = NULL;
+
+	check_indexes_linked_simple(&errmsg);
+
+	log_test("CORE / INDEX / LINKED / SINGLE THREADED:", NULLER(errmsg));
+	ck_assert_msg(NULLER(errmsg), errmsg);
+}
+END_TEST
+
+START_TEST (check_inx_linked_m) {
+
+	log_disable();
+	bool_t outcome = true;
+	stringer_t *errmsg = NULL;
+	check_inx_opt_t *opts = NULL;
+
+	if (status() && (!(opts = mm_alloc(sizeof(check_inx_opt_t))) || !(opts->inx = inx_alloc(M_INX_LINKED, &mm_free)))) {
+		errmsg = NULLER("Index linked");
+		outcome = false;
+	}
+	else if (status()) {
+		opts->type = M_INX_LINKED;
+		outcome = check_inx_mthread(opts);
+	}
+
+	if (opts) {
+		inx_cleanup(opts->inx);
+		mm_free(opts);
+	}
+
+	log_test("CORE / INDEX / LINKED / MULTI THREADED:", errmsg);
+	ck_assert_msg(outcome, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_inx_tree_s) {
+
+	log_disable();
+	bool_t outcome = true;
+	char *errmsg = NULL;
+
+	if (!check_indexes_tree_simple(&errmsg)) {
+		outcome = false;
+	}
+
+	log_test("CORE / INDEX / TREE / SINGLE THREADED:", NULLER(errmsg));
+	ck_assert_msg(outcome, errmsg);
+}
+END_TEST
+
+START_TEST (check_inx_tree_m) {
+
+	log_disable();
+	bool_t outcome = true;
+	stringer_t *errmsg = NULL;
+	check_inx_opt_t *opts = NULL;
+
+	if (status() && (!(opts = mm_alloc(sizeof(check_inx_opt_t))) || !(opts->inx = inx_alloc(M_INX_TREE, &mm_free)))) {
+		outcome = false;
+		errmsg = NULLER("The check index tree multi-threaded test failed.");
+	}
+	else if (status()) {
+		outcome = check_inx_mthread(opts);
+	}
+
+	if (opts) {
+		inx_cleanup(opts->inx);
+		mm_free(opts);
+	}
+
+	log_test("CORE / INDEX / TREE / MULTI THREADED:", errmsg);
+	ck_assert_msg(outcome, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_inx_hashed_s) {
+
+	log_disable();
+	bool_t outcome = true;
+	char *errmsg = NULL;
+
+	if (!check_indexes_hashed_simple(&errmsg)) {
+		outcome = false;
+	}
+
+	log_test("CORE / INDEX / HASHED / SINGLE THREADED:", NULLER(errmsg));
+	ck_assert_msg(outcome, errmsg);
+}
+END_TEST
+
+START_TEST (check_inx_hashed_m) {
+
+	log_disable();
+	bool_t outcome = true;
+	stringer_t *errmsg = NULL;
+	check_inx_opt_t *opts = NULL;
+
+	if (status() && (!(opts = mm_alloc(sizeof(check_inx_opt_t))) || !(opts->inx = inx_alloc(M_INX_HASHED, &mm_free)))) {
+		outcome = false;
+		errmsg = NULLER("The check index hashed multi-threaded test failed.");
+	}
+	else if (!check_inx_mthread(opts)) {
+		outcome = false;
+		errmsg = NULLER("The check index hashed multi-threaded test failed.");
+	}
+
+	if (opts) {
+		inx_cleanup(opts->inx);
+		mm_free(opts);
+	}
+
+	log_test("CORE / INDEX / HASHED / MULTI THREADED:", errmsg);
+	ck_assert_msg(outcome, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_inx_linked_cursor_s) {
+
+	log_disable();
+	bool_t outcome = true;
+	char *errmsg = NULL;
+
+	outcome = check_indexes_linked_cursor(&errmsg);
+
+	log_test("CORE / INDEX / LINKED CURSOR / SINGLE THREADED:", NULLER(errmsg));
+	ck_assert_msg(outcome, errmsg);
+}
+END_TEST
+
+START_TEST (check_inx_linked_cursor_m) {
+
+	log_disable();
+	bool_t outcome = true;
+	stringer_t *errmsg = NULL;
+	check_inx_opt_t *opts = NULL;
+
+
+	if (status() && (!(opts = mm_alloc(sizeof(check_inx_opt_t))) || !(opts->inx = inx_alloc(M_INX_LINKED, &mm_free)) || !check_inx_mthread(opts))) {
+		outcome = false;
+		errmsg = NULLER("The check index linked cursor multi-threaded test failed.");
+	}
+	else if (!check_inx_cursor_mthread(opts)) {
+		outcome = false;
+		errmsg = NULLER("The check index linked cursor multi-threaded test failed.");
+	}
+
+	if (opts) {
+		inx_cleanup(opts->inx);
+		mm_free(opts);
+	}
+
+	log_test("CORE / INDEX / LINKED CURSOR / MULTI THREADED:", NULLER(errmsg));
+	ck_assert_msg(outcome, errmsg);
+}
+END_TEST
+
+START_TEST (check_inx_tree_cursor_s) {
+
+	log_disable();
+	bool_t outcome = true;
+	char *errmsg = NULL;
+
+	if (!check_indexes_tree_cursor(&errmsg)) {
+		outcome = false;
+	}
+
+	log_test("CORE / INDEX / TREE CURSOR / SINGLE THREADED:", NULLER(errmsg));
+	ck_assert_msg(outcome, errmsg);
+}
+END_TEST
+
+START_TEST (check_inx_tree_cursor_m) {
+
+	log_disable();
+	bool_t outcome = true;
+	stringer_t *errmsg = NULL;
+	check_inx_opt_t *opts = NULL;
+
+	if (status() && (!(opts = mm_alloc(sizeof(check_inx_opt_t))) || !(opts->inx = inx_alloc(M_INX_TREE, &mm_free)) || !check_inx_mthread(opts))) {
+		outcome = false;
+		errmsg = NULLER("The check index linked cursor multi-threaded test failed.");
+	}
+	else if (!check_inx_cursor_mthread(opts)) {
+		outcome = false;
+		errmsg = NULLER("The check index linked cursor multi-threaded test failed.");
+	}
+
+	if (opts) {
+		inx_cleanup(opts->inx);
+		mm_free(opts);
+	}
+
+	log_test("CORE / INDEX / TREE CURSOR / MULTI THREADED:", errmsg);
+	ck_assert_msg(outcome, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_inx_hashed_cursor_s) {
+
+	log_disable();
+	bool_t outcome = true;
+	char *errmsg = NULL;
+
+	if (!check_indexes_hashed_cursor(&errmsg)) {
+		outcome = false;
+	}
+
+	log_test("CORE / INDEX / HASHED CURSOR / SINGLE THREADED:", NULLER(errmsg));
+	ck_assert_msg(outcome, errmsg);
+}
+END_TEST
+
+START_TEST (check_inx_hashed_cursor_m) {
+
+	log_disable();
+	bool_t outcome = true;
+	stringer_t *errmsg = NULL;
+	check_inx_opt_t *opts = NULL;
+
+	if (status() && (!(opts = mm_alloc(sizeof(check_inx_opt_t))) || !(opts->inx = inx_alloc(M_INX_HASHED, &mm_free)) || !check_inx_mthread(opts))) {
+		outcome = false;
+		errmsg = NULLER("The check index hashed cursor multi-threaded test failed.");
+	}
+	else if (!check_inx_cursor_mthread(opts)) {
+		outcome = false;
+		errmsg = NULLER("The check index hashed cursor multi-threaded test failed.");
+	}
+
+	if (opts) {
+		inx_cleanup(opts->inx);
+		mm_free(opts);
+	}
+
+	log_test("CORE / INDEX / HASHED CURSOR / MULTI THREADED:", errmsg);
+	ck_assert_msg(outcome, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_inx_append_s) {
+
+	log_disable();
+	bool_t outcome = true;
+	stringer_t *errmsg = MANAGEDBUF(1024);
+
+	outcome = check_inx_append_sthread(M_INX_TREE, errmsg);
+	if (outcome) outcome = check_inx_append_sthread(M_INX_HASHED, errmsg);
+	if (outcome) outcome = check_inx_append_sthread(M_INX_LINKED, errmsg);
+
+	log_test("CORE / INDEX / APPEND / SINGLE THREADED:", errmsg);
+	ck_assert_msg(outcome, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_inx_append_m) {
+
+	log_disable();
+	bool_t outcome = true;
+	stringer_t *errmsg = MANAGEDBUF(1024);
+
+	outcome = check_inx_append_mthread(M_INX_TREE, errmsg);
+	if (outcome) outcome = check_inx_append_mthread(M_INX_HASHED, errmsg);
+	if (outcome) outcome = check_inx_append_mthread(M_INX_LINKED, errmsg);
+
+	log_test("CORE / INDEX / APPEND / MULTI THREADED:", errmsg);
+	ck_assert_msg(outcome, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_constants) {
+
+	log_disable();
+	uint64_t total;
+	stringer_t *errmsg = NULL;
+	bool_t outcome = true;
+
+	for (unsigned int i = total = 0; string_check_constant && i < st_length_get(string_check_constant); i++) {
+		total += *(st_char_get(string_check_constant) + i);
+	}
+
+	if (total != 5366) {
+		outcome = false;
+		errmsg = NULLER("The single-threaded check string constants test failed.");
+	}
+
+	log_test("CORE / STRINGS / CONSTANTS / SINGLE THREADED:", errmsg);
+	ck_assert_msg(outcome, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_allocation) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_string_alloc(NULLER_T | CONTIGUOUS | HEAP) || !check_string_alloc(BLOCK_T | CONTIGUOUS | HEAP) || !check_string_alloc(
+		MANAGED_T | CONTIGUOUS | HEAP)) errmsg = NULLER("Standard allocation checks failed.");
+
+	if (!check_string_alloc(NULLER_T | JOINTED | HEAP) || !check_string_alloc(BLOCK_T | JOINTED | HEAP) || !check_string_alloc(
+		MANAGED_T | JOINTED | HEAP) || !check_string_alloc(MAPPED_T | JOINTED | HEAP)) errmsg = NULLER("Jointed allocation checks failed.");
+
+	if (!check_string_alloc(NULLER_T | CONTIGUOUS | SECURE) || !check_string_alloc(BLOCK_T | CONTIGUOUS | SECURE) || !check_string_alloc(
+		MANAGED_T | CONTIGUOUS | SECURE)) errmsg = NULLER("Secure allocation of contiguous types failed.");
+
+	if (!check_string_alloc(NULLER_T | JOINTED | SECURE) || !check_string_alloc(BLOCK_T | JOINTED | SECURE) || !check_string_alloc(
+		MANAGED_T | JOINTED | SECURE) || !check_string_alloc(MAPPED_T | JOINTED | SECURE)) errmsg
+		= NULLER("Secure allocation of jointed types failed.");
+
+	log_test("CORE / STRINGS / ALLOCATION / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_reallocation)	{
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_string_realloc(NULLER_T | CONTIGUOUS | HEAP) || !check_string_realloc(BLOCK_T | CONTIGUOUS | HEAP) || !check_string_realloc(
+		MANAGED_T | CONTIGUOUS | HEAP)) errmsg = NULLER("Standard reallocation checks failed.");
+
+	if (!check_string_realloc(NULLER_T | JOINTED | HEAP) || !check_string_realloc(BLOCK_T | JOINTED | HEAP) || !check_string_realloc(
+		MANAGED_T | JOINTED | HEAP) || !check_string_realloc(MAPPED_T | JOINTED | HEAP)) errmsg = NULLER("Jointed reallocation checks failed.");
+
+	if (!check_string_realloc(NULLER_T | CONTIGUOUS | SECURE) || !check_string_realloc(BLOCK_T | CONTIGUOUS | SECURE)
+		|| !check_string_realloc(MANAGED_T | CONTIGUOUS | SECURE)) errmsg = NULLER("Secure reallocation of contiguous types failed.");
+
+	if (!check_string_realloc(NULLER_T | JOINTED | SECURE) || !check_string_realloc(BLOCK_T | JOINTED | SECURE) || !check_string_realloc(
+		MANAGED_T | JOINTED | SECURE) || !check_string_realloc(MAPPED_T | JOINTED | SECURE)) errmsg
+		= NULLER("Secure reallocation of jointed types failed.");
+
+	log_test("CORE / STRINGS / REALLOCATION / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_duplication) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_string_dupe(NULLER_T | CONTIGUOUS | HEAP) || !check_string_dupe(BLOCK_T | CONTIGUOUS | HEAP) || !check_string_dupe(
+		MANAGED_T | CONTIGUOUS | HEAP)) errmsg = NULLER("Standard duplication checks failed.");
+
+	if (!check_string_dupe(NULLER_T | JOINTED | HEAP) || !check_string_dupe(BLOCK_T | JOINTED | HEAP) || !check_string_dupe(
+		MANAGED_T | JOINTED | HEAP) || !check_string_dupe(MAPPED_T | JOINTED | HEAP)) errmsg = NULLER("Jointed duplication checks failed.");
+
+	if (!check_string_dupe(NULLER_T | CONTIGUOUS | SECURE) || !check_string_dupe(BLOCK_T | CONTIGUOUS | SECURE) || !check_string_dupe(
+		MANAGED_T | CONTIGUOUS | SECURE)) errmsg = NULLER("Secure duplication of contiguous types failed.");
+
+	if (!check_string_dupe(NULLER_T | JOINTED | SECURE) || !check_string_dupe(BLOCK_T | JOINTED | SECURE) || !check_string_dupe(
+		MANAGED_T | JOINTED | SECURE) || !check_string_dupe(MAPPED_T | JOINTED | SECURE)) errmsg
+		= NULLER("Secure duplication of jointed types failed.");
+
+	log_test("CORE / STRINGS / DUPLICATION / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_merge) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_string_merge()) errmsg = NULLER("The stringer merge function failed.");
+
+	log_test("CORE / STRINGS / MERGE / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_print) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_string_print()) errmsg = NULLER("The stringer print function failed.");
+
+	log_test("CORE / STRINGS / PRINT / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+
+}
+END_TEST
+
+START_TEST (check_write) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_string_write()) errmsg = NULLER("The stringer write function failed.");
+
+	log_test("CORE / STRINGS / WRITE / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_digits) {
+
+	log_disable();
+	int8_t i8;
+	uint8_t ui8;
+	int16_t i16;
+	uint16_t ui16;
+	int32_t i32;
+	uint32_t ui32;
+	int64_t i64;
+	uint64_t ui64;
+
+	char buf[1024];
+	stringer_t *errmsg = NULL;
+	bool_t outcome = true;
+
+	for (uint64_t i = 0; status() && outcome && i < 8192; i++) {
+
+		i8 = rand_get_int8();
+		i16 = rand_get_int16();
+		i32 = rand_get_int32();
+		i64 = rand_get_int64();
+
+		ui8 = rand_get_uint8();
+		ui16 = rand_get_uint16();
+		ui32 = rand_get_uint32();
+		ui64 = rand_get_uint64();
+
+		if (int8_digits(i8) != snprintf(buf, 1024, "%hhi", i8))
+			outcome = false;
+		else if (int16_digits(i16) != snprintf(buf, 1024, "%hi", i16))
+			outcome = false;
+		else if (int32_digits(i32) != snprintf(buf, 1024, "%i", i32))
+			outcome = false;
+		else if (int64_digits(i64) != snprintf(buf, 1024, "%li", i64))
+			outcome = false;
+
+		else if (uint8_digits(ui8) != snprintf(buf, 1024, "%hhu", ui8))
+			outcome = false;
+		else if (uint16_digits(ui16) != snprintf(buf, 1024, "%hu", ui16))
+			outcome = false;
+		else if (uint32_digits(ui32) != snprintf(buf, 1024, "%u", ui32))
+			outcome = false;
+		else if (uint64_digits(ui64) != snprintf(buf, 1024, "%lu", ui64))
+			outcome = false;
+	}
+
+	// Error check
+	if (!outcome) errmsg = NULLER("The digit counters didn't match the print function!");
+
+	log_test("CORE / PARSERS / DIGITS / SINGLE THREADED:", errmsg);
+	ck_assert_msg(outcome, st_char_get(errmsg));
+
+}
+END_TEST
+
+START_TEST (check_clamp) {
+
+	log_disable();
+	chr_t *errmsg = NULL;
+	bool_t outcome = true;
+
+	// If any of the test cases return an error message, the unit test is considered a failure.
+	if (status() && ((errmsg = check_clamp_min()) ||
+		(errmsg = check_clamp_max()) ||
+		(errmsg = check_clamp_min_max_equal()) ||
+		(errmsg = check_clamp_randomizer()))) {
+		outcome = false;
 	}
 	else {
-		log_unit("%-64.64s%s%10.10s%s\n", test, color_green(), "PASSED", color_reset());
+
+		// This test case is intentionally using invalid values, so to avoid logging all the meaningless errors, we have to
+		// disable logging while the test case is running.
+		if (status() && (errmsg = check_clamp_min_max_invalid())) {
+			outcome = false;
+		}
 	}
 
-	return;
+	log_test("CORE / PARSERS / CLAMP / SINGLE THREADED:", NULLER(errmsg));
+	ck_assert_msg(outcome, errmsg);
+	ns_cleanup(errmsg);
 }
+END_TEST
 
-Suite * suite_check_magma(void) {
-  Suite *s = suite_create("\n\tMagma");
-  return s;
+START_TEST (check_capitalization) {
+
+	log_disable();
+	char *errmsg = NULL;
+	stringer_t *copy, *letters = CONSTANT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+
+	// Lowercase string.
+	if (status() && (copy = st_dupe_opts(MANAGED_T | CONTIGUOUS | HEAP, letters))) {
+		lower_st(copy);
+		for (size_t i = 0; status() && !errmsg && i < st_length_get(copy); i++) {
+			if (!islower(*(st_char_get(copy) + i))) {
+				errmsg = "The lowercase string function failed.";
+			}
+		}
+		st_free(copy);
+	}
+	else if (status()){
+		errmsg = "The lowercase string function failed.";
+	}
+
+	// Uppercase string.
+	if (status() && !errmsg && (copy = st_dupe_opts(MANAGED_T | CONTIGUOUS | HEAP, letters))) {
+		upper_st(copy);
+		for (size_t i = 0; status() && !errmsg && i < st_length_get(copy); i++) {
+			if (!isupper(*(st_char_get(copy) + i))) {
+				errmsg = "The uppercase string function failed.";
+			}
+		}
+		st_free(copy);
+	}
+	else if (status() && !errmsg) {
+		errmsg = "The uppercase string function failed.";
+	}
+
+	// Uppercase/lowercase all of the possible character codes.
+	for (uchr_t c = 0; status() && !errmsg && c < UCHAR_MAX; c++) {
+		if (tolower(c) != lower_chr(c) || toupper(c) != upper_chr(c)) {
+			errmsg = "The uppercase/lowercase character functions failed.";
+		}
+	}
+
+	log_test("CORE / PARSERS / CASE / SINGLE THREADED:", NULLER(errmsg));
+	ck_assert_msg(!errmsg, errmsg);
+
 }
+END_TEST
 
-/**
- * @brief This function will construct a special suite with only a single unit test that is extracted from the running executable based on it's name.
- * @note	This function will allow us to create a special test suite with any single test case available in the global symbols table. This same functionality
- * 		is available using the CK_RUN_CASE environment variable in the current version of libcheck, but wasn't available in the version currently available on our
- * 		target platform, which is why this method of achieving the same end was created.
- * @param testname The name of the unit test we want our barrister to run.
- * @return The initialized suite, assuming we found the requested unit test, otherwise NULL is returned.
- */
-Suite * suite_check_barrister(chr_t *testname) {
+START_TEST (check_classify) {
 
-	void *handle;
-	void *unittest;
-	Suite *s = suite_create("\tBarrister");;
+	log_disable();
+	stringer_t *errmsg = NULL;
 
-	// By calling dlopen() with NULL for the filename, we are attempting to establish a handle for the currently running executable image.
-	if (!(handle = dlopen(NULL, RTLD_LOCAL | RTLD_NOW))) {
-		log_error("Unable to open a dynamic symbol handle for the currently running program.");
-		return NULL;
+	for (uchr_t c = 0; status() && !errmsg && c < UCHAR_MAX; c++) {
+		if ((isalnum(c) ? true : false) != chr_alphanumeric(c) || (isascii(c) ? true : false) != chr_ascii(c) ||
+			(isblank(c) ? true : false) != chr_blank(c) || (islower(c) ? true : false) != chr_lower(c) ||
+			(isdigit(c) ? true : false) != chr_numeric(c)	|| (isprint(c) ? true : false) != chr_printable(c) ||
+			(isupper(c) ? true : false) != chr_upper(c) || (isspace(c) ? true : false) != chr_whitespace(c) ||
+			(ispunct(c) ? true : false) != chr_punctuation(c)) {
+			errmsg = NULLER("The ASCII classification functions failed.");
+		}
 	}
 
-	// Check the currently running program for the requested function name.
-	if (!(*(void **)(&unittest) = dlsym(handle, testname))) {
-		log_info("%s", dlerror());
+	log_test("CORE / CLASSIFY / ASCII / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_qp) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_encoding_qp()) errmsg = NULLER("The quoted printable encoding functions failed.");
+
+	log_test("CORE / ENCODING / QUOTED PRINTABLE / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+
+}
+END_TEST
+
+START_TEST (check_hex) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_encoding_hex()) errmsg = NULLER("The hex encoding functions failed.");
+
+	log_test("CORE / ENCODING / HEX / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_url) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_encoding_url()) errmsg = NULLER("The URL encoding functions failed.");
+
+	log_test("CORE / ENCODING / URL / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_base64) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_encoding_base64(false))
+		errmsg = NULLER("The base64 encoding functions failed.");
+	else if (!check_encoding_base64(true))
+		errmsg = NULLER("The base64 secure encoding functions failed.");
+	else if (!check_encoding_base64_mod(false))
+		errmsg = NULLER("The modified base64 encoding functions failed.");
+	else if (!check_encoding_base64_mod(true))
+		errmsg = NULLER("The modified base64 encoding functions failed.");
+
+	log_test("CORE / ENCODING / BASE64 / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_zbase32) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_encoding_zbase32()) errmsg = NULLER("The zbase32 encoding functions failed.");
+
+	log_test("CORE / ENCODING / ZBASE32 / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_checksum)
+{
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (status() && !check_checksum_fuzz_sthread()) {
+		errmsg = NULLER("Checksum fuzz test failed.");
 	}
-	else {
-		suite_check_testcase(s, "", testname, unittest);
+	else if (status() && !check_checksum_fixed_sthread()) {
+		errmsg = NULLER("Checksum output failed to match the expected value.");
+	}
+	else if (status() && !check_checksum_loop_sthread()) {
+		errmsg = NULLER("Checksum output failed to match the expected value.");
 	}
 
-	dlclose(handle);
+	log_test("CORE / MEMORY / CHECKSUMS / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_secmem) {
+
+	log_disable();
+	size_t bsize;
+	void *blocks[1024];
+	stringer_t *errmsg = NULL;
+
+	if (status() && magma.secure.memory.enable && (bsize = (magma.secure.memory.length / 1024))) {
+
+		// Now try and trigger an overflow.
+		for (size_t i = 0; i < 1024; i++) {
+			blocks[i] = mm_sec_alloc(bsize + 16);
+		}
+
+		for (size_t i = 0; i < 1024; i++) {
+			if (blocks[i]) {
+				mm_sec_free(blocks[i]);
+				blocks[i] = NULL;
+			}
+		}
+
+		// Now try and trigger a single byte overflow.
+		for (size_t i = 0; i < 1024; i++) {
+			blocks[i] = mm_sec_alloc(bsize + 1);
+		}
+
+		for (size_t i = 0; i < 1024; i++) {
+			if (blocks[i]) {
+				mm_sec_free(blocks[i]);
+				blocks[i] = NULL;
+			}
+		}
+
+		// Now were going to request randomly sized blocks.
+		for (size_t i = 0; i < 1024; i++) {
+			blocks[i] = mm_sec_alloc(bsize + rand_get_uint32() % 32);
+		}
+
+		for (size_t i = 0; i < 1024; i++) {
+			if (blocks[i]) {
+				mm_sec_free(blocks[i]);
+				blocks[i] = NULL;
+			}
+		}
+	}
+
+	log_test("CORE / MEMORY / SECURE ADDRESS RANGE / SINGLE THREADED:",
+			!errmsg ? (status() && magma.secure.memory.enable && (magma.secure.memory.length / 1024)
+					? errmsg : NULLER("SKIPPED")) : errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_signames_s) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_system_signames()) errmsg = NULLER("The single-threaded check system signames test failed.");
+
+	log_test("CORE / HOST / SIGNAL NAMES / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_errnames_s) {
+
+	log_disable();
+	stringer_t *errmsg = NULL;
+
+	if (!check_system_errnonames()) errmsg = NULLER("The single-threaded check system errnonames test failed.");
+
+	log_test("CORE / HOST / ERROR NAMES / SINGLE THREADED:", errmsg);
+	ck_assert_msg(!errmsg, st_char_get(errmsg));
+}
+END_TEST
+
+START_TEST (check_nbo_s) {
+
+	log_disable();
+	bool_t outcome = true;
+
+	bool_t (*checks[])(void) = {
+		&check_nbo_parameters,
+		&check_nbo_simple
+	};
+
+	stringer_t *err = NULL;
+
+	stringer_t *errors[] = {
+		NULLER("check_nbo_parameters failed"),
+		NULLER("check_nbo_simple failed")
+	};
+
+	for(uint_t i = 0; status() && !err && i < sizeof(checks)/sizeof((checks)[0]); ++i) {
+		if(!(outcome = checks[i]())) {
+			err = errors[i];
+		}
+	}
+
+	log_test("CORE / NETWORK BYTE ORDER / SINGLE THREADED:", st_data_get(err));
+	ck_assert_msg(outcome, st_data_get(err));
+}
+END_TEST
+
+START_TEST (check_bitwise)
+{
+
+	log_disable();
+	bool_t outcome = true;
+
+	bool_t (*checks[])(void) = {
+		&check_bitwise_parameters,
+		&check_bitwise_determinism,
+		&check_bitwise_simple
+	};
+
+	stringer_t *err = NULL;
+
+	stringer_t *errors[] = {
+		NULLER("check_bitwise_parameters failed"),
+		NULLER("check_bitwise_determinism failed"),
+		NULLER("check_bitwise_simple failed")
+	};
+
+	for(uint_t i = 0; status() && !err && i < sizeof(checks)/sizeof((checks)[0]); ++i) {
+		if(!(outcome = checks[i]())) {
+			err = errors[i];
+		}
+	}
+
+	log_test("CORE / STRINGS / BITWISE / SINGLE THREADED:", st_data_get(err));
+	ck_assert_msg(outcome, st_data_get(err));
+}
+END_TEST
+
+START_TEST (check_ip_private_s) {
+
+	log_disable();
+	bool_t result = true;
+	stringer_t *errmsg = MANAGEDBUF(1024);
+
+	if (status()) result = check_ip_private_sthread(errmsg);
+
+	log_test("CORE / HOST / ADDRESS / PRIVATE / SINGLE THREADED:", errmsg);
+	ck_assert_msg(result, st_char_get(errmsg));
+
+}
+END_TEST
+
+START_TEST (check_ip_localhost_s) {
+
+	log_disable();
+	bool_t result = true;
+	stringer_t *errmsg = MANAGEDBUF(1024);
+
+	if (status()) result = check_ip_localhost_sthread(errmsg);
+
+	log_test("CORE / HOST / ADDRESS / LOCAL / SINGLE THREADED:", errmsg);
+	ck_assert_msg(result, st_char_get(errmsg));
+
+}
+END_TEST
+
+Suite * suite_check_core(void) {
+
+	Suite *s = suite_create("\tCore");
+
+	suite_check_testcase(s, "CORE", "Parsers / Digits", check_digits);
+	suite_check_testcase(s, "CORE", "Parsers / Clamp", check_clamp);
+	suite_check_testcase(s, "CORE", "Parsers / Capitalization", check_capitalization);
+
+	suite_check_testcase(s, "CORE", "Classify / ASCII", check_classify);
+
+	suite_check_testcase(s, "CORE", "Strings / Constants", check_constants);
+	suite_check_testcase(s, "CORE", "Strings / Allocation", check_allocation);
+	suite_check_testcase(s, "CORE", "Strings / Reallocation", check_reallocation);
+	suite_check_testcase(s, "CORE", "Strings / Duplication", check_duplication);
+	suite_check_testcase(s, "CORE", "Strings / Merge", check_merge);
+	suite_check_testcase(s, "CORE", "Strings / Print", check_print);
+	suite_check_testcase(s, "CORE", "Strings / Write", check_write);
+	suite_check_testcase(s, "CORE", "Strings / Compare", check_compare);
+	suite_check_testcase(s, "CORE", "Strings / Binary Search", check_bsearch);
+	suite_check_testcase(s, "CORE", "Strings / Bitwise Operations", check_bitwise);
+
+	suite_check_testcase(s, "CORE", "Memory / Checksum", check_checksum);
+	suite_check_testcase(s, "CORE", "Memory / Secure Address Range", check_secmem);
+
+	suite_check_testcase(s, "CORE", "Host / System / Signal Names", check_signames_s);
+	suite_check_testcase(s, "CORE", "Host / System / Error Names", check_errnames_s);
+	suite_check_testcase(s, "CORE", "Host / Address / Standard / S", check_address_standard_s);
+	suite_check_testcase(s, "CORE", "Host / Address / Presentation / S", check_address_presentation_s);
+	suite_check_testcase(s, "CORE", "Host / Address / Reversed / S", check_address_reversed_s);
+	suite_check_testcase(s, "CORE", "Host / Address / Subnet / S", check_address_subnet_s);
+	suite_check_testcase(s, "CORE", "Host / Address / Segment / S", check_address_segment_s);
+	suite_check_testcase(s, "CORE", "Host / Address / Octet / S", check_address_octet_s);
+	suite_check_testcase(s, "CORE", "Host / Address / Local / S", check_ip_localhost_s);
+	suite_check_testcase(s, "CORE", "Host / Address / Private / S", check_ip_private_s);
+
+	suite_check_testcase(s, "CORE", "Encoding / Quoted Printable", check_qp);
+	suite_check_testcase(s, "CORE", "Encoding / Hex", check_hex);
+	suite_check_testcase(s, "CORE", "Encoding / URL", check_url);
+	suite_check_testcase(s, "CORE", "Encoding / Base64", check_base64);
+	suite_check_testcase(s, "CORE", "Encoding / Zbase32", check_zbase32);
+	suite_check_testcase(s, "CORE", "Encoding / Network Byte Order/S", check_nbo_s);
+
+	suite_check_testcase(s, "CORE", "Indexes / Linked/S", check_inx_linked_s);
+	suite_check_testcase(s, "CORE", "Indexes / Linked/M", check_inx_linked_m);
+	suite_check_testcase(s, "CORE", "Indexes / Hashed/S", check_inx_hashed_s);
+	suite_check_testcase(s, "CORE", "Indexes / Hashed/M", check_inx_hashed_m);
+	suite_check_testcase(s, "CORE", "Indexes / Tree/S", check_inx_tree_s);
+	suite_check_testcase(s, "CORE", "Indexes / Tree/M", check_inx_tree_m);
+	suite_check_testcase(s, "CORE", "Indexes / Linked Cursor/S", check_inx_linked_cursor_s);
+	suite_check_testcase(s, "CORE", "Indexes / Linked Cursor/M", check_inx_linked_cursor_m);
+	suite_check_testcase(s, "CORE", "Indexes / Hashed Cursor/S", check_inx_hashed_cursor_s);
+	suite_check_testcase(s, "CORE", "Indexes / Hashed Cursor/M", check_inx_hashed_cursor_m);
+	suite_check_testcase(s, "CORE", "Indexes / Tree Cursor/S", check_inx_tree_cursor_s);
+	suite_check_testcase(s, "CORE", "Indexes / Tree Cursor/M", check_inx_tree_cursor_m);
+	suite_check_testcase(s, "CORE", "Indexes / Append/S", check_inx_append_s);
+	suite_check_testcase(s, "CORE", "Indexes / Append/M", check_inx_append_m);
+
 	return s;
 }
 
-void suite_check_testcase(Suite *s, const char *tags, const char *name, TFun func) {
-
-	TCase *tc = NULL;
-
-	tcase_add_test((tc = tcase_create(name)), func);
-	tcase_set_timeout(tc, case_timeout);
-	tcase_set_tags(tc, tags);
-	suite_add_tcase(s, tc);
-	return;
-}
-
-/***
- * @return Will return -1 if the code is unable to determine whether tracing is active, 0 if tracing is disabled and
- *		1 if tracing has been detected.
- */
-int_t running_on_debugger(void) {
-
-	int_t status, ret;
-	pid_t pid, parent;
-
-	if ((pid = fork()) == -1) {
-		return -1;
-	}
-
-	// If were the child, we'll try to start tracing the parent process. If our trace request fails, we assume that means
-	// its already being traced by a debugger.
-	else if (pid == 0) {
-
-		parent = getppid();
-
-		if (ptrace(PTRACE_ATTACH, parent, NULL, NULL) == 0) {
-			waitpid(parent, NULL, 0);
-			ptrace(PTRACE_CONT, NULL, NULL);
-			ptrace(PTRACE_DETACH, getppid(), NULL, NULL);
-			exit(0);
-		}
-
-		exit(1);
-	}
-	else if ((ret = waitpid(pid, &status, 0)) == pid && WIFEXITED(status) == true) {
-
-		// Use a ternary to guarantee only two possible return values.
-		return WEXITSTATUS(status) ? 1 : 0;
-	}
-
-	return -1;
-}
-
-/**
- * @brief	Show the check program usage information.
- * @see		display_usage()
- */
-void check_display_help (chr_t *invalid_option) {
-
-	log_info("%s%s%s" \
-			"\tmagmad.check [options] [config_file]\n\n" \
-			"\t%-25.25s\t\t%s\n\n\t%-25.25s\t\t%s\n\t%-25.25s\t\t%s\n\t%-25.25s\t\t%s\n\t%-25.25s\t\t%s\n\n\t%-25.25s\t\t%s\n\t%-25.25s\t\t%s\n\n",
-			(invalid_option ? "The command line option \"" : ""), (invalid_option ? invalid_option : ""),
-			(invalid_option ? "\" is invalid. Please consult the text below and try again.\n\n" : "\n"),
-			"-c, --check NAME", "run a single unit test",
-			"    --dspam-path PATH", "set the DSPAM checker path, or disable the check if none is specified.",
-			"    --tank-path PATH",  "set the tank checker path, or disable the check if none is specified.",
-			"    --virus-path PATH", "set the virus checker path, or disable the check if none is specified.",
-			"    --disable-spf", "disable the SPF checker.",
-			"-h, --help", "display the magma unit tester command line options and exit",
-			"-v, --version", "display the magma unit tester version information and exit");
-
-	return;
-}
-
-/**
- * @brief	Check to see if the specified command line option specified an optional parameter, and adjust the index accordingly.
- * @note	This function will automatically generate an error through display_usage() if the parameters are incorrect.
- * @param	xargv	a pointer to the main function's argv array.
- * @param	iptr	a pointer to the xargv option index to be checked and updated.
- * @param	xargc	the number of items in the xargv array.
- * @return	a pointer to the value of the current index's optional parameter if specified, or NULL if one wasn't.
- */
-chr_t * check_next_opt(char *xargv[], int *iptr, int xargc) {
-
-	chr_t *result;
-
-	// If this is an optional parameter then there still must be a config file specified after it.
-	if (*iptr == (xargc-1)) {
-		return NULL;
-	}
-	// If the next argument begins with '-' then our option has a null parameter.
-	else if (!mm_cmp_cs_eq(xargv[*iptr + 1], "-", 1)) {
-		(*iptr)++;
-		return NULL;
-	}
-
-	(*iptr) += 2;
-
-	if (!(result = ns_dupe(xargv[*iptr - 1]))) {
-		log_error("Memory allocation failure encountered while parsing the command line options.");
-	}
-
-	return result;
-}
-
-/**
- * @brief	Process any command line arguments supplied to magma unit tester.
- * @note	A few command line options are supported: -c (--check), -h (--help), -v (--version), and along with options for overriding
- * 			the hard coded file system paths, and the disabling the spf check. If the final option doesn't start with "-" then it's assumed
- * 			to be the config file path.
- * @return	Returns -1 if the program should exit with a failure code, returns 0 if the program should simply exit and returns 1 if the program should continue.
- */
-int_t check_args_parse(int argc, char *argv[]) {
-
-	int_t i = 1;
-
-	while (i < argc) {
-
-		if (!st_cmp_cs_eq(NULLER(argv[i]), PLACER("-c", 2)) || !st_cmp_cs_eq(NULLER(argv[i]), PLACER("--check", 7))) {
-
-			if (barrister_unit_test) {
-				log_error("The \"--check\" parameter may only be used once. Exiting.\n");
-				return -1;
-			}
-			else if (!(barrister_unit_test = check_next_opt(argv, &i, argc))) {
-				log_error("The individual unit test name is missing. Exiting.\n");
-				return -1;
-			}
-
-		}
-		else if (!st_cmp_cs_eq(NULLER(argv[i]), PLACER("--disable-spf", 13))) {
-			do_spf_check = false;
-			i++;
-		}
-		else if (!st_cmp_cs_eq(NULLER(argv[i]), PLACER("-v", 2)) || !st_cmp_cs_eq(NULLER(argv[i]), PLACER("--version", 9))) {
-			log_info("\n\t%s\n\n\t%-20.20s %14.14s\n\t%-20.20s %14.14s\n\t%-20.20s %14.14s\n\n", "magmad.check",
-				"version", build_version(), "commit", build_commit(), "build", build_stamp());
-			return 0;
-		}
-		// Display the help if it's explicitly requested, or if we encounter an option we don't recognize.
-		else if (!st_cmp_cs_eq(NULLER(argv[i]), PLACER("-h", 2)) || !st_cmp_cs_eq(NULLER(argv[i]), PLACER("--help", 6))) {
-			check_display_help(NULL);
-			return 0;
-		}
-		// Otherwise it's the config file
-		else if (i == (argc - 1) && mm_cmp_cs_eq(argv[i], "-", 1)) {
-			snprintf(magma.config.file, MAGMA_FILEPATH_MAX, "%s", argv[i]);
-			i++;
-		}
-		else {
-			check_display_help(argv[i]);
-			return -1;
-		}
-
-	}
-
-	return 1;
-}
-
-int main(int argc, char *argv[]) {
-
-	SRunner *sr;
-	int_t failed = 0, result;
-	pthread_t *net_listen_thread = NULL;
-	time_t prog_start, test_start, test_end;
-
-	if (process_kill(PLACER("magmad", 6), SIGTERM, 10) < 0 || process_kill(PLACER("magmad.check", 12), SIGTERM, 10) < 0) {
-		log_error("Another instance of the Magma Daemon is already running and refuses to die.");
-		exit(EXIT_FAILURE);
-	}
-
-	// Setup
-	prog_start = time(NULL);
-
-	// Updates the location of the config file if it was specified on the command line.
-	if ((result = check_args_parse(argc, argv)) != 1) {
-		exit(result ? EXIT_FAILURE : EXIT_SUCCESS);
-	}
-
-	if (!process_start()) {
-		log_error("Initialization error. Exiting.\n");
-		status_set(-1);
-		process_stop();
-		exit(EXIT_FAILURE);
-	}
-
-	// Run the network listener using a background thread.
-	net_listen_thread = thread_alloc(net_listen, NULL);
-
-	// During development, we flush the cache system before running the unit tests.
-	cache_flush();
-
-	// Unit Test Config
-	sr = srunner_create(suite_check_magma());
-
-	// If the command line told us to run a specific test only add that individual test using the special barrister suite.
-	if (barrister_unit_test) {
-		srunner_add_suite(sr, suite_check_barrister(barrister_unit_test));
-	}
-	// Otherwise add all of the unit tests to the suite runner.
-	else {
-		srunner_add_suite(sr, suite_check_sample());
-		srunner_add_suite(sr, suite_check_core());
-		srunner_add_suite(sr, suite_check_provide());
-		srunner_add_suite(sr, suite_check_prime());
-		srunner_add_suite(sr, suite_check_config());
-		srunner_add_suite(sr, suite_check_engine());
-		srunner_add_suite(sr, suite_check_network());
-		srunner_add_suite(sr, suite_check_objects());
-		srunner_add_suite(sr, suite_check_users());
-		srunner_add_suite(sr, suite_check_mail());
-		srunner_add_suite(sr, suite_check_smtp());
-		srunner_add_suite(sr, suite_check_pop());
-		srunner_add_suite(sr, suite_check_imap());
-		srunner_add_suite(sr, suite_check_http());
-		srunner_add_suite(sr, suite_check_camel());
-		srunner_add_suite(sr, suite_check_regression());
-	}
-
-	// If were being run under Valgrind, we need to disable forking and increase the default timeout.
-	// Under Valgrind, forked checks appear to improperly timeout.
-	if (RUNNING_ON_VALGRIND == 0 && (failed = running_on_debugger()) == 0) {
-		log_unit("Not being traced or profiled...\n");
-		srunner_set_fork_status (sr, CK_FORK);
-		case_timeout = RUN_TEST_CASE_TIMEOUT;
-	}
-
-	// Trace detection attempted was thwarted.
-	else {
-		if (failed == -1) log_unit("Trace detection was thwarted.\n");
-		else log_unit("Tracing or debugging is active...\n");
-		srunner_set_fork_status (sr, CK_NOFORK);
-		case_timeout = PROFILE_TEST_CASE_TIMEOUT;
-	}
-
-	// Execute
-	log_unit("--------------------------------------------------------------------------\n");
-
-	log_disable();
-	test_start = time(NULL);
-	srunner_run_all(sr, CK_SILENT);
-	test_end = time(NULL);
-	log_enable();
-
-	// Output timing.
-	log_unit("--------------------------------------------------------------------------\n");
-	log_unit("%-63.63s %9lus\n", "TEST DURATION:", test_end - test_start);
-	log_unit("%-63.63s %9lus\n", "TOTAL DURATION:", test_end - prog_start);
-
-	// Summary
-	log_unit("--------------------------------------------------------------------------\n");
-	failed = srunner_ntests_failed(sr);
-	srunner_print(sr, CK_NORMAL);
-
-	// The Check Output Ending
-	log_unit("--------------------------------------------------------------------------\n");
-
-	// Cleanup and free the resources allocated by the check code.
-	status_set(-1);
-	srunner_free(sr);
-
-	// Cleanup the background listening thread.
-	thread_cancel(*net_listen_thread);
-	thread_join(*net_listen_thread);
-	mm_free(net_listen_thread);
-
-	// Cleanup and free the resources allocated by the magma code.
-	process_stop();
-
-	ns_cleanup(barrister_unit_test);
-	exit((failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE);
-
-}

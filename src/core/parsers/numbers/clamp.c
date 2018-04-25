@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/parsers/numbers/clamp.c
+ * @file /magma/core/parsers/numbers/clamp.c
  *
  * @brief Provides a collection of functions for clamping a number to a specific range.
  */
 
-#include "core.h"
+#include "../../core.h"
 
 /**
  * @brief	Ensure a number is between the min and max values, otherwise return the boundary value.

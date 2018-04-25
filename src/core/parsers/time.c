@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/parsers/time.c
+ * @file /magma/core/parsers/time.c
  *
  * @brief	Functions used to parse time.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Get the number of seconds until midnight.

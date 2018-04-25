@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/checksum/crc.c
+ * @file /magma/core/checksum/crc.c
  *
  * @brief	An x86 implementation of the 32-bit and 64-bit CRC algorithms.
  */
 
-#include "core.h"
+#include "magma.h"
 
 #define A1 A
 #define A(x) ((x) & 0xFF)

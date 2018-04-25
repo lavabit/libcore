@@ -1,12 +1,13 @@
 
 /**
- * @file /libcore/core/core.h
+ * @file /magma/core/core.h
  *
  * @brief	A collection of types, declarations and includes needed when accessing the core module and the type definitions needed to parse the header files that follow.
  */
 
 #ifndef MAGMA_CORE_H
 #define MAGMA_CORE_H
+
 
 #include <errno.h>
 #include <stdio.h>
@@ -32,6 +33,64 @@
 #include <sys/mman.h>
 #include <sys/utsname.h>
 #include <sys/resource.h>
+
+//from magma.h
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <unistd.h>
+#include <stddef.h>
+#include <limits.h>
+#include <signal.h>
+#include <string.h>
+#include <dirent.h>
+#include <pwd.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <inttypes.h>
+#include <pthread.h>
+#include <stdarg.h>
+#include <dlfcn.h>
+#include <execinfo.h>
+#include <stdbool.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/resource.h>
+#include <sys/time.h>
+#include <sys/socket.h>
+#include <sys/utsname.h>
+#include <sys/prctl.h>
+#include <sys/epoll.h>
+#include <sys/sysctl.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <arpa/nameser.h>
+#include <netdb.h>
+#include <resolv.h>
+#include <regex.h>
+#include <ftw.h>
+#include <search.h>
+#include <semaphore.h>
+#include <sys/mman.h>
+
+// GNU C Library
+#include <gnu/libc-version.h>
+
+#ifndef PACKAGE_MAGMA
+extern __thread char threadBuffer[1024];
+#define bufptr (char *)&(threadBuffer)
+#define buflen sizeof(threadBuffer)
+#endif
+//end
+
+//for core separation
+#ifndef PACKAGE_MAGMA
+#define CORE_THREAD_STACK_SIZE 1048576
+#define CORE_SECURE_MEMORY_LENGTH 32768
+//TODO default value is probly wrong
+#define CORE_PAGE_LENGTH 4096
+#endif
+//end
 
 /**
  * The type definitions used by Magma that are not defined by the system headers.

@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/encodings/mappings.c
+ * @file /magma/core/encodings/mappings.c
  *
  * @brief	Character-to-value mappings employed by the various base64 encoders.
  */
 
-#include "core.h"
+#include "magma.h"
 
 mappings_t mappings = {
 	.zbase32 = {

@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/parsers/numbers/digits.c
+ * @file /magma/core/parsers/numbers/digits.c
  *
  * @brief	Functions for counting the digit places in a number, including the sign character for signed numbers.
  */
 
-#include "core.h"
+#include "../../core.h"
 
 /**
  * @brief	Count the number of digits needed to represent a base-10 64-bit unsigned integer.
