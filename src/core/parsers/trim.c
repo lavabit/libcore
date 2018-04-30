@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/parsers/trim.c
+ * @file /magma/core/parsers/trim.c
  *
  * @brief	Functions used to trim whitespace from strings.
  */
 
-#include "core.h"
+#include "magma.h"
 
 static bool_t is_trim(char c) {
 	return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == '\v';

@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/core.h
+ * @file /magma/core/core.h
  *
  * @brief	A collection of types, declarations and includes needed when accessing the core module and the type definitions needed to parse the header files that follow.
  */
@@ -32,6 +32,17 @@
 #include <sys/mman.h>
 #include <sys/utsname.h>
 #include <sys/resource.h>
+
+
+//for core separation
+#ifndef PACKAGE_MAGMA
+#define CORE_THREAD_STACK_SIZE 1048576
+#define CORE_SECURE_MEMORY_LENGTH 32768
+//TODO default value is probly wrong
+#define CORE_PAGE_LENGTH getpagesize()
+#define MAGMA_FILEPATH_MAX PATH_MAX
+#endif
+//end
 
 /**
  * The type definitions used by Magma that are not defined by the system headers.

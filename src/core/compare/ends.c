@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/compare/ends.c
+ * @file /magma/core/compare/ends.c
  *
  * @brief	Functions used to compare the ends of strings with other strings.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Perform a case-sensitive check to see if one string ends in another, comparing backwards.

@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/thread/thread.h
+ * @file /magma/core/thread/thread.h
  *
  * @brief	Interface for providing pthread functionality.
  */

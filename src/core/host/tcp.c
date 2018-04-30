@@ -1,12 +1,12 @@
 
 /**
- * @file /libcore/src/core/host/tcp.c
+ * @file /magma/src/core/host/tcp.c
  *
  * @brief Generic fuctions for interaction with TCP/IP socket connections.
  *
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief Determine whether the error is a permanent/fatal failure, or a transient error.

@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/checksum/checksum.h
+ * @file /magma/core/checksum/checksum.h
  *
  * @brief	Declarations for hash functions that have been implemented internally.
  */

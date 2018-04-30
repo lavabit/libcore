@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/host/folder.c
+ * @file /magma/core/host/folder.c
  *
  * @brief	Functions for folder operations.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Check to see if a specified directory exists, or if specified, create it if it doesn't exist.
@@ -19,10 +19,9 @@ int_t folder_exists(stringer_t *path, bool_t create) {
 	int_t result = 0;
 
 	if (!(d = opendir(st_char_get(path)))) {
-		if (!create || !(result = mkdir(st_char_get(path), S_IRWXU))) {
+		if (!create || (result = mkdir(st_char_get(path), S_IRWXU))) {
 			result = -1;
-		}
-		{
+		} else {
 			result = 1;
 		}
 	} else {

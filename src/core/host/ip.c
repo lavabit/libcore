@@ -1,12 +1,12 @@
 
 /**
- * @file /libcore/src/core/host/ip.c
+ * @file /magma/src/core/host/ip.c
  *
  * @brief Generic interface for parsing, and manipulating the IP address structure.
  *
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	An abstract method of retrieving the address family for an IP structure.

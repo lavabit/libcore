@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/classify/ascii.c
+ * @file /magma/core/classify/ascii.c
  *
  * @brief	Functions used to classify ASCII characters.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Determine whether a specified character is an ASCII character.

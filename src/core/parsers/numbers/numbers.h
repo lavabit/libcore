@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/parsers/numbers/numbers.h
+ * @file /magma/core/parsers/numbers/numbers.h
  *
  * @brief	Function declarations for the number conversion functions.
  */

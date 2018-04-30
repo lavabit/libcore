@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/encodings/encodings.h
+ * @file /magma/core/encodings/encodings.h
  *
  * @brief	Functions used to encode and decode data in various formats.
  */

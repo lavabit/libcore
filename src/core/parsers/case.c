@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/parsers/case.c
+ * @file /magma/core/parsers/case.c
  *
  * @brief	A collection of functions used for manipulating the capitalization of characters.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Return the uppercase representation of a character.

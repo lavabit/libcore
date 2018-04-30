@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/indexes/linked.c
+ * @file /magma/core/indexes/linked.c
  *
  * @brief	The linked list implementation functions utilized by the generic index interface.
  */
 
-#include "core.h"
+#include "magma.h"
 
 // Linked lists.
 typedef struct __attribute__ ((packed)) {

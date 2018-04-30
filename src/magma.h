@@ -6,9 +6,9 @@
         with the Magma project.
  */
 
-#ifndef MAGMA_H
-#define MAGMA_H
+//#ifndef MAGMA_H
+//#define MAGMA_H
 
 #include "libcore.h"
 
-#endif
+//#endif

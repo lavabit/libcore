@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/memory/memory.c
+ * @file /magma/core/memory/memory.c
  *
  * @brief	The functions used to handle Magma memory buffers.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	A checked cleanup function which can be used free a variable number memory buffers.

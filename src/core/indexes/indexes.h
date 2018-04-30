@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/indexes/indexes.h
+ * @file /magma/core/indexes/indexes.h
  *
  * @brief	Function declarations and types for the generic index interface.
  */

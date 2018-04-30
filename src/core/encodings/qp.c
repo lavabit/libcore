@@ -1,13 +1,13 @@
 
 /**
- * @file /libcore/core/encodings/qp.c
+ * @file /magma/core/encodings/qp.c
  *
  * @brief	Functions for encoding/decoding quoted printable data, as described by RFC 2045, section 6.7.
  * @note	This function operates on standard 8-bit characters, transforming non-printable characters into printable ones.
  * 			It is used as a MIME content encoding, and wraps lines at 76 characters.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Perform QP (quoted-printable) encoding of a string.

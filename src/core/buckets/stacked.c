@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/buckets/stacked.c
+ * @file /magma/core/buckets/stacked.c
  *
  * @brief	An interface for handling FIFO stacks.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Free a stacked list and all of its underlying data nodes.

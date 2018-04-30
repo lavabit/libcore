@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/parsers/formats/nvp.c
+ * @file /magma/core/parsers/formats/nvp.c
  *
  * @brief	Interface to the name/value pair parser.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * on success the number of valid pairs is returned

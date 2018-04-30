@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/buckets/arrays.c
+ * @file /magma/core/buckets/arrays.c
  *
  * @brief 	A collection of functions used to create, maintain and safely utilize arrays of pointers.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Allocate an array of a specified number of elements.
