@@ -24,12 +24,5 @@ pthread_rwlock_t status_lock = PTHREAD_RWLOCK_INITIALIZER;
  * @return	true if the caller should continue processing (status level is positive) or false otherwise.
  */
 bool_t status(void) {
-
-	bool_t result = false;
-
-	rwlock_lock_read(&status_lock);
-	if (status_level >= 0) result = true;
-	rwlock_unlock(&status_lock);
-
-	return result;
+	return true;
 }

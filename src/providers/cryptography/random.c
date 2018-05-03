@@ -41,6 +41,10 @@ size_t rand_write(stringer_t *s) {
 		return 0;
 	}*/
 
+	for (int i =0; i < len; i++){
+		p[i] = rand_get_uint8();
+	}
+
 	if (st_valid_tracked(opts)) {
 		st_length_set(s, len);
 	}
