@@ -26,12 +26,48 @@
 
 extern int case_timeout;
 
-#define log_unit(...) log_internal (__FILE__, __FUNCTION__, __LINE__, M_LOG_LINE_FEED_DISABLE | M_LOG_TIME_DISABLE | M_LOG_FILE_DISABLE | M_LOG_LINE_DISABLE | M_LOG_FUNCTION_DISABLE | M_LOG_STACK_TRACE_DISABLE, __VA_ARGS__)
+#define log_unit(...) log_internal ( __VA_ARGS__)
 //#define testcase(s, tc, name, func) tcase_add_test((tc = tcase_create(name)), func); tcase_set_timeout(tc, case_timeout); suite_add_tcase(s, tc)
 
 Suite * suite_check_sample(void);
 void log_test(chr_t *test, stringer_t *error);
 void suite_check_testcase(Suite *s, const char *tags, const char *name, TFun func);
+
+#define status() (true)
+#define thread_start() (true)
+#define thread_stop() do {} while(0)
+// log.c
+void     log_disable(void);
+void     log_enable(void);
+void log_internal(const char *format, ...);
+
+#undef log_pedantic
+#undef log_check
+#undef log_info
+#undef log_error
+#undef log_critical
+#undef log_options
+
+
+// Macro used record debug information during development.
+#define log_pedantic(...) log_internal (__VA_ARGS__)
+
+// Log an error message if the specified conditional evaluates to true.
+#define log_check(expr) do { if (expr) log_internal (__STRING (expr)); } while (0)
+
+
+// Used to record information related to daemon performance.
+#define log_info(...) log_internal (__VA_ARGS__)
+
+// Used to log errors that may indicate a problem requiring user intervention to solve.
+#define log_error(...) log_internal (__VA_ARGS__)
+
+// Used to record errors that could cause system instability.
+#define log_critical(...) log_internal (__VA_ARGS__)
+
+// Used to override the globally configured log options for a specific entry.
+#define log_options(options, ...) log_internal (__VA_ARGS__)
+
 
 #endif
 

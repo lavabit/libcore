@@ -1,3 +1,6 @@
+core.check
+.cproject
+y
 # Prerequisites
 *.d
 
@@ -56,5 +59,3 @@ dkms.conf
 
 */.deps/
 */.objs/
-
-libcore
