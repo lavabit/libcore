@@ -78,10 +78,6 @@
 // GNU C Library
 #include <gnu/libc-version.h>
 
-//#include "providers/symbols.h"
-
-//inline bool_t status(void);// __attribute__((always_inline));
-
 #include "core/core.h"
 
 #include "providers/cryptography/cryptography.h"
