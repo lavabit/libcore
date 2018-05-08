@@ -8,29 +8,44 @@ a community effort to develop and maintain a C library for building cross platfo
 
 ## Dependencies
 
-System:
-libc.so libdl.so librt.so libpthread.so
+libc.so  
+libdl.so  
+librt.so  
+libpthread.so  
 
 ## Supported Platforms
 
-* CentOS 6 x86_64
-* CentOS 7 x86_64
+The libcore library should compile, and function properly on the majority of Linux based distributions based around relatively recent versions of gcc and glibc. Currently the libcore development team is primarily focused on testing the library on the following operating systems:
+
+* CentOS 6
+* CentOS 7
+
+In the past libcore has been tested sucessfully on:
+
+* Red Hat Enterprise Linux 6
+* Red Hat Enterprise Linux 7
+* Oracle Linux 7
+* Ubuntu 16.04
+* OpenSUSE 42
+* Fedora 27
+* Debian 8
+* Debian 9
 
 ## Build Instructions
 
-Run:
+Run this compile libcore as a static archive and dynamic library:
 
     make all
 
-The specific make targets:
+Or to make a specific target:
 
     make libcore.a
     make libcore.so
 
-Finally, to compile and run the unit tests use:
+To compile the unit test runtime without executing it:
 
-	make check
+    make core.check
 
-Or compile the check utility with the make target:
+Finally, to compile the unit tests and then execute the check utility:
 
-	make core.check
+    make check
