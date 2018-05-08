@@ -40,16 +40,16 @@ bool_t   check_string_realloc(uint32_t check);
 bool_t   check_encoding_qp(void);
 
 /// inx_check.c
-bool_t    check_inx_cursor_mthread(check_inx_opt_t *opts);
-void		  check_inx_cursor_mthread_cnv(check_inx_opt_t *opts);
-bool_t    check_inx_cursor_sthread(check_inx_opt_t *opts);
-bool_t    check_inx_mthread(check_inx_opt_t *opts);
-void		  check_inx_mthread_cnv(check_inx_opt_t *opts);
-bool_t    check_inx_sthread(check_inx_opt_t *opts);
-bool_t	  check_inx_append_helper(inx_t *);
-void	  check_inx_append_test(inx_t *);
-bool_t 	  check_inx_append_sthread(MAGMA_INDEX, stringer_t*);
-bool_t 	  check_inx_append_mthread(MAGMA_INDEX, stringer_t*);
+bool_t   check_inx_append_helper(inx_t *inx);
+bool_t   check_inx_append_mthread(MAGMA_INDEX inx_type, stringer_t *errmsg);
+void     check_inx_append_mthread_test(inx_t *inx);
+bool_t   check_inx_append_sthread(MAGMA_INDEX inx_type, stringer_t *errmsg);
+bool_t   check_inx_cursor_mthread(check_inx_opt_t *opts);
+void     check_inx_cursor_mthread_cnv(check_inx_opt_t *opts);
+bool_t   check_inx_cursor_sthread(check_inx_opt_t *opts);
+bool_t   check_inx_mthread(check_inx_opt_t *opts);
+void     check_inx_mthread_cnv(check_inx_opt_t *opts);
+bool_t   check_inx_sthread(check_inx_opt_t *opts);
 
 /// ip_check.c
 bool_t check_uint16_to_hex_st(uint16_t val, stringer_t *buff);
@@ -68,7 +68,7 @@ bool_t   check_encoding_hex(void);
 bool_t   check_encoding_url(void);
 
 /// core_check.c
-Suite *                    suite_check_core(void);
+Suite *  suite_check_core(void);
 
 /// base64_check.c
 bool_t   check_encoding_base64(bool_t secure_on);
@@ -109,14 +109,15 @@ bool_t check_checksum_fuzz_sthread(void);
 bool_t check_checksum_fixed_sthread(void);
 bool_t check_checksum_loop_sthread(void);
 
-/// address_check.c
-void check_address_octet_s (int _i CK_ATTRIBUTE_UNUSED);
-void check_address_presentation_s (int _i CK_ATTRIBUTE_UNUSED);
-void check_address_reversed_s (int _i CK_ATTRIBUTE_UNUSED);
-void check_address_segment_s (int _i CK_ATTRIBUTE_UNUSED);
-void check_address_standard_s (int _i CK_ATTRIBUTE_UNUSED);
-void check_address_subnet_s (int _i CK_ATTRIBUTE_UNUSED);
-bool_t check_ip_private_scheck(stringer_t *errmsg);
-bool_t check_ip_localhost_scheck(stringer_t *errmsg);
+/// ip_check.c
+void     check_address_octet_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_presentation_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_reversed_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_segment_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_standard_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_subnet_s (int _i CK_ATTRIBUTE_UNUSED);
+bool_t   check_ip_localhost_sthread(stringer_t *errmsg);
+bool_t   check_ip_private_sthread(stringer_t *errmsg);
+bool_t   check_uint16_to_hex_st(uint16_t val, stringer_t *buff);
 
 #endif

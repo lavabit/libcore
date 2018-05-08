@@ -111,4 +111,9 @@ size_t     rand_write(stringer_t *s);
 void   log_disable(void);
 void   log_enable(void);
 
+/// build.c
+const   char * build_commit(void);
+const   char * build_stamp(void);
+const   char * build_version(void);
+
 #endif

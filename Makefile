@@ -53,7 +53,7 @@ CPPFILES				= $(foreach dir, $(call SRCDIRS, $(1)), $(wildcard $(dir)/*.cpp))
 SRCFILES				= $(foreach dir, $(call SRCDIRS, $(1)), $(wildcard $(dir)/*.c))
 
 # Setup the Defines
-DEFINES					+= -D_REENTRANT -DFORTIFY_SOURCE=2 -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DHAVE_NS_TYPE -DCORE_BUILD=$(LIBCORE_VERSION) -DCORE_STAMP=$(LIBCORE_TIMESTAMP)
+DEFINES					+= -D_REENTRANT -DFORTIFY_SOURCE=2 -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DHAVE_NS_TYPE -DCORE_VERSION=\"$(LIBCORE_VERSION)\" -DCORE_COMMIT=\"$(LIBCORE_COMMIT)\" -DCORE_TIMESTAMP=\"$(LIBCORE_TIMESTAMP)\"
 
 INCLUDES				= -Ilib/local/include -I/usr/include -Isrc -Icheck/core -Isrc/core -Icheck
 WARNINGS				= -Wfatal-errors -Werror -Wall -Wextra -Wformat-security -Warray-bounds  -Wformat=2 -Wno-format-nonliteral

@@ -125,6 +125,16 @@ int main(int argc, char *argv[]) {
 	// Setup
 	prog_start = time(NULL);
 
+	printf("-------------------------------- VERSIONS --------------------------------\n\n" \
+		"%-10.10s %63.63s\n%-10.10s %63.63s\n%-10.10s %63.63s\n\n" \
+		"%-10.10s %63.63s\n%-10.10s %63.63s\n%-10.10s %63.63s\n\n",
+		"CORE:", build_version(),
+		"COMMIT:", build_commit(),
+		"TIMESTAMP:", build_stamp(),
+		"PLATFORM:", st_char_get(host_platform(MANAGEDBUF(128))),
+		"KERNEL:", st_char_get(host_version(MANAGEDBUF(128))),
+		"GLIBC:", gnu_get_libc_version());
+
 	// Initialize the secure memory module.
 	if (!mm_sec_start()) {
 		log_unit("Secure memory initialization failed...\n");
@@ -139,7 +149,6 @@ int main(int argc, char *argv[]) {
 	// If were being run under Valgrind, we need to disable forking and increase the default timeout.
 	// Under Valgrind, forked checks appear to improperly timeout.
 	if (RUNNING_ON_VALGRIND == 0 && (failed = running_on_debugger()) == 0) {
-		log_unit("Not being traced or profiled...\n");
 		srunner_set_fork_status (sr, CK_FORK);
 		case_timeout = RUN_TEST_CASE_TIMEOUT;
 	}
