@@ -1,9 +1,21 @@
 
+/**
+ * @file /check/magma/magma_check.c
+ *
+ * @brief	The unit test executable entry point.
+ */
+
 #include "magma_check.h"
 
-bool_t log_enabled = true;
-pthread_mutex_t log_mutex =	PTHREAD_MUTEX_INITIALIZER;
+int_t case_timeout = RUN_TEST_CASE_TIMEOUT;
 
+/**
+ *
+ * @brief	Logs the message described by format, and provided as a variadic argument list.
+ * @param 	format	The printf style format for the log message.
+ * @param	va_list	A variadic list of data items to be used by the format string.
+ * @return	This function returns no value.
+ */
 void log_internal(const char *format, ...) {
 
 	va_list args;
@@ -20,10 +32,6 @@ void log_internal(const char *format, ...) {
 
 	vfprintf(stdout, format, args);
 
-	fprintf(stdout, "\n");
-
-
-
 	fflush(stdout);
 	mutex_unlock(&log_mutex);
 
@@ -31,40 +39,6 @@ void log_internal(const char *format, ...) {
 
 	return;
 }
-/**
- * @brief	Disable logging.
- * @return	This function returns no value.
- */
-inline void log_disable(void) {
-	mutex_lock(&log_mutex);
-	log_enabled = false;
-	mutex_unlock(&log_mutex);
-	return;
-}
-
-/**
- * @brief	Enable logging.
- * @return	This function returns no value.
- */
-inline void log_enable(void) {
-	mutex_lock(&log_mutex);
-	log_enabled = true;
-	mutex_unlock(&log_mutex);
-	return;
-}
-
-
-/**
- * @file /check/magma/magma_check.c
- *
- * @brief	The unit test executable entry point.
- */
-
-#include "magma_check.h"
-
-int_t case_timeout = RUN_TEST_CASE_TIMEOUT;
-bool_t do_virus_check = true, do_tank_check = true, do_dspam_check = true, do_spf_check = true;
-chr_t *barrister_unit_test = NULL;
 
 /**
  * @brief Enable the log so we can print status information. We're only concerned with whether the

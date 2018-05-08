@@ -102,11 +102,12 @@ START_TEST (check_inx_linked_s) {
 
 	log_disable();
 	char *errmsg = NULL;
+	bool_t outcome = true;
 
-	check_indexes_linked_simple(&errmsg);
+	outcome = check_indexes_linked_simple(&errmsg);
 
 	log_test("CORE / INDEX / LINKED / SINGLE THREADED:", NULLER(errmsg));
-	ck_assert_msg(NULLER(errmsg), errmsg);
+	ck_assert_msg(outcome, errmsg);
 }
 END_TEST
 

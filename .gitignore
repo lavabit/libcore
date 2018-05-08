@@ -64,7 +64,7 @@ dkms.conf
 /.settings/
 
 # Compiled Library and Runtime Files
-/ core.check
+/core.check
 /libcore.a
 /libcore.so
 /libcore-stripped.a

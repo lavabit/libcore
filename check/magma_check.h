@@ -16,30 +16,45 @@
 #include <check.h>
 #include <valgrind/valgrind.h>
 
-// Normally the START_TEST macro creates a static testcase function. Unfortunately we can't
-// find those symbols using dlsym() so we can't dynamically select individual test cases at
-// runtime. This redefines the macro without using the static keyword to workaround this problem.
-#undef START_TEST
-#define START_TEST(__testname) void __testname (int _i CK_ATTRIBUTE_UNUSED) {  tcase_fn_start (""# __testname, __FILE__, __LINE__);
-
 #include "core/core_check.h"
 
 extern int case_timeout;
 
-#define log_unit(...) log_internal ( __VA_ARGS__)
-//#define testcase(s, tc, name, func) tcase_add_test((tc = tcase_create(name)), func); tcase_set_timeout(tc, case_timeout); suite_add_tcase(s, tc)
+// Normally the START_TEST macro creates static testcase functions. Unfortunately dlsym() can't find static
+// symbols. We override the default macro with the variant below, which doesn't use the static keyword. This
+// allows us to use the dlsym() function to find and execute individual test case functions.
+#undef START_TEST
+#define START_TEST(__testname) void __testname (int _i CK_ATTRIBUTE_UNUSED) {  tcase_fn_start (""# __testname, __FILE__, __LINE__);
 
-Suite * suite_check_sample(void);
-void log_test(chr_t *test, stringer_t *error);
-void suite_check_testcase(Suite *s, const char *tags, const char *name, TFun func);
-
+// These macros provide substitutes for functionality which is needed by magma, but isn't relevant for
+// standalone libcore usage.
 #define status() (true)
 #define thread_start() (true)
 #define thread_stop() do {} while(0)
-// log.c
-void     log_disable(void);
-void     log_enable(void);
-void log_internal(const char *format, ...);
+
+/// magma_check.c
+void     log_internal(const char *format, ...);
+void     log_test(chr_t *test, stringer_t *error);
+int_t    running_on_debugger(void);
+Suite *  suite_check_single(void);
+void     suite_check_testcase(Suite *s, const char *tags, const char *name, TFun func);
+
+/// sample_check.c
+bool_t   check_component_test1_sthread(stringer_t *errmsg);
+bool_t   check_component_test2_mthread(stringer_t *errmsg);
+void     check_component_test2_wrap(void);
+Suite *  suite_check_sample(void);
+
+//
+//
+//
+//Suite * suite_check_sample(void);
+//void log_test(chr_t *test, stringer_t *error);
+//void suite_check_testcase(Suite *s, const char *tags, const char *name, TFun func);
+//
+//void     log_disable(void);
+//void     log_enable(void);
+//void log_internal(const char *format, ...);
 
 #undef log_pedantic
 #undef log_check
@@ -48,13 +63,11 @@ void log_internal(const char *format, ...);
 #undef log_critical
 #undef log_options
 
-
 // Macro used record debug information during development.
 #define log_pedantic(...) log_internal (__VA_ARGS__)
 
 // Log an error message if the specified conditional evaluates to true.
 #define log_check(expr) do { if (expr) log_internal (__STRING (expr)); } while (0)
-
 
 // Used to record information related to daemon performance.
 #define log_info(...) log_internal (__VA_ARGS__)
@@ -68,6 +81,7 @@ void log_internal(const char *format, ...);
 // Used to override the globally configured log options for a specific entry.
 #define log_options(options, ...) log_internal (__VA_ARGS__)
 
+#define log_unit(...) log_internal (__VA_ARGS__)
 
 #endif
 
