@@ -14,9 +14,9 @@ PACKAGE_URL				= https://lavabit.com
 
 TOPDIR					= $(realpath .)
 
-LIBCORE_CHECK_SRCDIR		= check
-LIBCORE_CHECK_PROGRAM		= core.check$(EXEEXT)
-LIBCORE_CHECK_INCLUDES		= -Icheck -Isrc/core #-Icheck
+LIBCORE_CHECK_SRCDIR	= check
+LIBCORE_CHECK_PROGRAM	= core.check$(EXEEXT)
+LIBCORE_CHECK_INCLUDES	= -Icheck -Isrc/core
 
 LIBCORE_SRCDIR			= src
 LIBCORE_SHARED			= libcore$(DYNLIBEXT)
@@ -28,7 +28,7 @@ LIBCORE_DEPFILES		= $(call DEPFILES, $(call SRCFILES, src check)) $(call DEPFILE
 LIBCORE_STRIPPED		= libcore-stripped$(STATLIBEXT) libcore-stripped$(DYNLIBEXT)
 LIBCORE_DEPENDENCIES	=
 
-LIBCORE_REPO				= $(shell which git &> /dev/null && git log &> /dev/null && echo 1)
+LIBCORE_REPO			= $(shell which git &> /dev/null && git log &> /dev/null && echo 1)
 ifneq ($(strip $(LIBCORE_REPO)),1)
 	LIBCORE_VERSION			:= $(PACKAGE_VERSION)
 	LIBCORE_COMMIT			:= "NONE"
@@ -36,7 +36,7 @@ else
 	LIBCORE_VERSION			:= $(PACKAGE_VERSION).$(shell git log --format='%H' | wc -l)
 	LIBCORE_COMMIT			:= $(shell git log --format="%H" -n 1 | cut -c33-40)
 endif
-LIBCORE_TIMESTAMP			= $(shell date +'%Y%m%d.%H%M')
+LIBCORE_TIMESTAMP		= $(shell date +'%Y%m%d.%H%M')
 
 # Dependency Files
 DEPDIR					= .deps
@@ -59,32 +59,32 @@ INCLUDES				= -Ilib/local/include -I/usr/include -Isrc -Icheck/core -Isrc/core -
 WARNINGS				= -Wfatal-errors -Werror -Wall -Wextra -Wformat-security -Warray-bounds  -Wformat=2 -Wno-format-nonliteral
 
 # Compiler Parameters
-CC								= gcc
-CFLAGS							= -std=gnu99 -O0 -fPIC -fmessage-length=0 -ggdb3 -rdynamic -c $(CFLAGS_WARNINGS) -MMD 
-CFLAGS_WARNINGS					= -Wall -Werror -Winline -Wformat-security -Warray-bounds #-Wfatal-errors
-CFLAGS_PEDANTIC					= -Wextra -Wpacked -Wunreachable-code -Wformat=2
+CC						= gcc
+CFLAGS					= -std=gnu99 -O0 -fPIC -fmessage-length=0 -ggdb3 -rdynamic -c $(CFLAGS_WARNINGS) -MMD 
+CFLAGS_WARNINGS			= -Wall -Werror -Winline -Wformat-security -Warray-bounds #-Wfatal-errors
+CFLAGS_PEDANTIC			= -Wextra -Wpacked -Wunreachable-code -Wformat=2
 
-CPP								= g++
-CPPFLAGS						= -std=c++0x $(CPPFLAGS_WARNINGS) -Wno-unused-parameter -pthread -g3 
-CPPFLAGS_WARNINGS				= -Werror -Wall -Wextra -Wformat=2 -Wwrite-strings -Wno-format-nonliteral #-Wfatal-errors
+CPP						= g++
+CPPFLAGS				= -std=c++0x $(CPPFLAGS_WARNINGS) -Wno-unused-parameter -pthread -g3 
+CPPFLAGS_WARNINGS		= -Werror -Wall -Wextra -Wformat=2 -Wwrite-strings -Wno-format-nonliteral #-Wfatal-errors
 
 # Linker Parameters
-LD								= gcc
-LDFLAGS							= -rdynamic
+LD						= gcc
+LDFLAGS					= -rdynamic
 
 # Archiver Parameters
-AR								= ar
-ARFLAGS							= rcs
+AR						= ar
+ARFLAGS					= rcs
 
 # Strip Parameters
-STRIP							= strip
-STRIPFLAGS						= --strip-debug
+STRIP					= strip
+STRIPFLAGS				= --strip-debug
 
 # GProf Parameters
-GPROF							= -pg -finstrument-functions -fprofile-arcs -ftest-coverage
+GPROF					= -pg -finstrument-functions -fprofile-arcs -ftest-coverage
 
 # PProf Parameters
-PPROF							= -lprofiler
+PPROF					= -lprofiler
 
 # Other External programs
 MV						= mv --force
@@ -140,7 +140,7 @@ ifeq ($(VERBOSE),no)
 	@echo 'Finished' $(BOLD)$(GREEN)$(TARGETGOAL)$(NORMAL)
 endif
 
-warning:
+warning: config
 ifeq ($(VERBOSE),no)
 	@echo
 	@echo 'For a more verbose output'
@@ -190,13 +190,7 @@ distclean:
 	@$(RM) --recursive --force $(DEPDIR) $(OBJDIR)
 	@echo 'Finished' $(BOLD)$(GREEN)$(TARGETGOAL)$(NORMAL)
 
-#$(LIBCORE_DEPENDENCIES): res/scripts/build.deps.sh res/scripts/build.deps.params.sh
-#ifeq ($(VERBOSE),no)
-#	@echo 'Running' $(RED)$(<F)$(NORMAL)
-#else
-#	@echo
-#endif
-#	$(RUN)res/scripts/build.deps.sh all
+$(LIBCORE_DEPENDENCIES): 
 
 $(LIBCORE_STRIPPED): $(LIBCORE_SHARED) $(LIBCORE_STATIC) $(LIBCORE_PROGRAMS)
 ifeq ($(VERBOSE),no)
@@ -208,8 +202,7 @@ endif
 	awk -F'file format' '{print $$2}' | tr --delete [:space:]) -o "$@" "$(subst -stripped,,$@)"
 
 # Construct the dime check executable
-#$(LIBCORE_DEPENDENCIES)
-$(LIBCORE_CHECK_PROGRAM):  $(call OBJFILES, $(call CPPFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call CCFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call SRCFILES, $(LIBCORE_CHECK_SRCDIR))) $(LIBCORE_STATIC)
+$(LIBCORE_CHECK_PROGRAM): $(LIBCORE_DEPENDENCIES) $(call OBJFILES, $(call CPPFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call CCFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call SRCFILES, $(LIBCORE_CHECK_SRCDIR))) $(LIBCORE_STATIC)
 ifeq ($(VERBOSE),no)
 	@echo 'Constructing' $(RED)$@$(NORMAL)
 else
@@ -279,8 +272,4 @@ endif
 
 # Special Make Directives
 .SUFFIXES: .c .cc .cpp .o
-.NOTPARALLEL: warning conifg $(LIBCORE_DEPENDENCIES)
 .PHONY: warning config finished all check stripped
-
-
-# vim:set softtabstop=4 shiftwidth=4 tabstop=4:
