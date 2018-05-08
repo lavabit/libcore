@@ -78,18 +78,19 @@
 // GNU C Library
 #include <gnu/libc-version.h>
 
-//#include "providers/symbols.h"
-
 #include "core/core.h"
 
-#include "engine/status/status.h"
 #include "providers/cryptography/cryptography.h"
-#include "engine/log/log.h"
-#include "engine/context/context.h"
 
 
 extern __thread char threadBuffer[1024];
 #define bufptr (char *)&(threadBuffer)
 #define buflen sizeof(threadBuffer)
+
+ static inline bool_t status(void) {
+	return true;
+}
+
+
 
 #endif
