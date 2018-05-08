@@ -36,12 +36,7 @@ size_t rand_write(stringer_t *s) {
 		len = st_length_get(s);
 	}
 
-	/*if (!RAND_bytes_d || RAND_bytes_d(p, len) != 1) {
-		log_pedantic("Could not generate a random string of bytes.");
-		return 0;
-	}*/
-
-	for (int i =0; i < len; i++){
+	for (int_t i = 0; i < len; i++){
 		p[i] = rand_get_uint8();
 	}
 
@@ -52,7 +47,6 @@ size_t rand_write(stringer_t *s) {
 	return len;
 }
 
-
 /**
  * @brief	Generate a random unsigned 64 bit number.
  * @note	This function attempts to generate random data securely, but falls back on the pseudo-random number generator.
@@ -61,11 +55,12 @@ size_t rand_write(stringer_t *s) {
  */
 uint64_t rand_get_uint64(void) {
 
-		uint64_t result;
-		// Use system supplied pseudo random number generator if an error occurs.
-		result = rand_r(&rand_ctx);
-		result = result << 32;
-		result = result | rand_r(&rand_ctx);
+	uint64_t result;
+
+	// Use system supplied pseudo random number generator if an error occurs.
+	result = rand_r(&rand_ctx);
+	result = result << 32;
+	result = result | rand_r(&rand_ctx);
 
 	return result;
 }
@@ -79,6 +74,7 @@ uint64_t rand_get_uint64(void) {
 uint32_t rand_get_uint32(void) {
 
 	uint32_t result;
+
 	result = rand_r(&rand_ctx);
 
 	return result;
@@ -94,8 +90,7 @@ uint16_t rand_get_uint16(void) {
 
 	uint16_t result;
 
-		result = rand_r(&rand_ctx) % UINT16_MAX;
-
+	result = rand_r(&rand_ctx) % UINT16_MAX;
 
 	return result;
 }
@@ -109,7 +104,8 @@ uint16_t rand_get_uint16(void) {
 uint8_t rand_get_uint8(void) {
 
 	uint8_t result;
-		result = rand_r(&rand_ctx) % UINT8_MAX;
+
+	result = rand_r(&rand_ctx) % UINT8_MAX;
 
 	return result;
 }
@@ -120,18 +116,17 @@ uint8_t rand_get_uint8(void) {
  * @return	the newly generated signed 64 bit integer.
  * @see		RAND_bytes()
  */
-// QUESTION: Why aren't we just generating unsigned random numbers and casting them to signed values?
 int64_t rand_get_int64(void) {
 
 	int64_t result;
 
-		result = rand_r(&rand_ctx);
-		result = result << 32;
-		result = result | rand_r(&rand_ctx);
+	result = rand_r(&rand_ctx);
+	result = result << 32;
+	result = result | rand_r(&rand_ctx);
 
-		if (rand_r(&rand_ctx) % 2) {
-			result *= -1;
-		}
+	if (rand_r(&rand_ctx) % 2) {
+		result *= -1;
+	}
 
 	return result;
 }
@@ -140,11 +135,11 @@ int32_t rand_get_int32(void) {
 
 	int32_t result;
 
-		result = rand_r(&rand_ctx) % INT32_MAX;
+	result = rand_r(&rand_ctx) % INT32_MAX;
 
-		if (rand_r(&rand_ctx) % 2) {
-			result *= -1;
-		}
+	if (rand_r(&rand_ctx) % 2) {
+		result *= -1;
+	}
 
 
 	return result;
@@ -153,12 +148,12 @@ int32_t rand_get_int32(void) {
 int16_t rand_get_int16(void) {
 
 	int16_t result;
-		result = rand_r(&rand_ctx) % INT16_MAX;
 
-		if (rand_r(&rand_ctx) % 2) {
-			result *= -1;
-		}
+	result = rand_r(&rand_ctx) % INT16_MAX;
 
+	if (rand_r(&rand_ctx) % 2) {
+		result *= -1;
+	}
 
 	return result;
 }
@@ -167,12 +162,11 @@ int8_t rand_get_int8(void) {
 
 	int8_t result;
 
-		result = rand_r(&rand_ctx) % INT8_MAX;
+	result = rand_r(&rand_ctx) % INT8_MAX;
 
-		if (rand_r(&rand_ctx) % 2) {
-			result *= -1;
-		}
-
+	if (rand_r(&rand_ctx) % 2) {
+		result *= -1;
+	}
 
 	return result;
 }
@@ -186,11 +180,10 @@ bool_t rand_start(void) {
 
 	uint_t seed = (time(NULL) | thread_get_thread_id());
 
-
-	// Set the context to the current time, in case were unable to generate a secure random number for a seed.
+	// Set the generic random context to the current time, to ensure the results are somewhat random when the secure
+	// random number is unavailable, or fails.
 	srand(rand_r(&seed));
 	rand_ctx = rand_r(&seed);
-
 
 	return true;
 }

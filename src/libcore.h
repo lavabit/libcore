@@ -80,17 +80,68 @@
 
 #include "core/core.h"
 
-#include "providers/cryptography/cryptography.h"
-
+/// random.c
+int16_t    rand_get_int16(void);
+int32_t    rand_get_int32(void);
+int64_t    rand_get_int64(void);
+int8_t     rand_get_int8(void);
+uint16_t   rand_get_uint16(void);
+uint32_t   rand_get_uint32(void);
+uint64_t   rand_get_uint64(void);
+uint8_t    rand_get_uint8(void);
+bool_t     rand_start(void);
+void       rand_stop(void);
+size_t     rand_write(stringer_t *s);
 
 extern __thread char threadBuffer[1024];
 #define bufptr (char *)&(threadBuffer)
 #define buflen sizeof(threadBuffer)
 
- static inline bool_t status(void) {
+static inline bool_t status(void) {
 	return true;
 }
 
+/**
+ *
+ * @brief	Logs the message described by format, and provided as a variadic argument list.
+ * @param 	format	The printf style format for the log message.
+ * @param	va_list	A variadic list of data items to be used by the format string.
+ * @return	This function returns no value.
+ */
+static inline void log_internal(const char *format, ...) {
 
+	va_list args;
+
+	va_start(args, format);
+
+	mutex_lock(&log_mutex);
+
+	// Someone has disabled the log output.
+	if (!log_enabled) {
+		mutex_unlock(&log_mutex);
+		return;
+	}
+
+	vfprintf(stdout, format, args);
+	fprintf(stdout, "\n");
+
+	fflush(stdout);
+	mutex_unlock(&log_mutex);
+
+	va_end(args);
+
+	return;
+}
+
+/**
+ * @brief	Disable logging.
+ * @return	This function returns no value.
+ */
+static inline log_disable(void) {
+	mutex_lock(&log_mutex);
+	log_enabled = false;
+	mutex_unlock(&log_mutex);
+	return;
+}
 
 #endif
