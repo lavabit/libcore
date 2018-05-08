@@ -15,12 +15,12 @@ libpthread.so
 
 ## Supported Platforms
 
-The libcore library should compile, and function properly on the majority of Linux based distributions based around relatively recent versions of gcc and glibc. Currently the libcore development team is primarily focused on testing the library on the following operating systems:
+The libcore library should compile, and function properly on the majority of Linux based distributions based around relatively recent versions of gcc and glibc. Currently the libcore development team is primarily focused on testing changes, and ensuring functionality on the following operating systems:
 
 * CentOS 6
 * CentOS 7
 
-In the past libcore has been tested sucessfully on:
+However, in the past libcore has been tested sucessfully on:
 
 * Red Hat Enterprise Linux 6
 * Red Hat Enterprise Linux 7
@@ -37,15 +37,12 @@ Run this compile libcore as a static archive and dynamic library:
 
     make all
 
-Or to make a specific target:
+To compile and run the unit tests:
+
+    make check
+
+To make a specific target:
 
     make libcore.a
     make libcore.so
-
-To compile the unit test runtime without executing it:
-
     make core.check
-
-Finally, to compile the unit tests and then execute the check utility:
-
-    make check
