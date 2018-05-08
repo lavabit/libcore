@@ -125,6 +125,12 @@ int main(int argc, char *argv[]) {
 	// Setup
 	prog_start = time(NULL);
 
+	// Initialize the secure memory module.
+	if (!mm_sec_start()) {
+		log_unit("Secure memory initialization failed...\n");
+		exit(EXIT_FAILURE);
+	}
+
 	// Unit Test Config
 	sr = srunner_create(suite_check_single());
 	srunner_add_suite(sr, suite_check_sample());

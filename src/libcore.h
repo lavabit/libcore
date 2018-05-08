@@ -80,6 +80,12 @@
 
 #include "core/core.h"
 
+#define CORE_SECURE_MEMORY_ENABLED true
+#define CORE_SECURE_MEMORY_LENGTH 65536
+#define CORE_THREAD_STACK_SIZE 1048576
+#define CORE_PAGE_LENGTH getpagesize()
+#define MAGMA_FILEPATH_MAX PATH_MAX
+
 extern __thread char threadBuffer[1024];
 #define bufptr (char *)&(threadBuffer)
 #define buflen sizeof(threadBuffer)
