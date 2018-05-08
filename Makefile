@@ -149,6 +149,10 @@ ifeq ($(VERBOSE),no)
 endif
 
 config:
+ifeq ($(strip $(LIBCORE_REPO)),1)
+	@git update-index --assume-unchanged .project
+	@git update-index --assume-unchanged .cproject
+endif
 	@echo
 	@echo 'TARGET' $(TARGETGOAL)
 	@echo 'VERBOSE' $(VERBOSE)

@@ -1,6 +1,3 @@
-core.check
-.cproject
-y
 # Prerequisites
 *.d
 
@@ -57,5 +54,20 @@ dkms.conf
 # Vim
 *.swp
 
-*/.deps/
-*/.objs/
+# Intermediary gcc/make Files
+/.deps/
+/.objs/
+
+ # Eclipse Project Files
+/.project
+/.cproject
+/.settings/
+
+# Compiled Library and Runtime Files
+/ core.check
+/libcore.a
+/libcore.so
+/libcore-stripped.a
+/libcore-stripped.so
+
+
