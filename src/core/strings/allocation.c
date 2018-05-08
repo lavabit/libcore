@@ -577,7 +577,7 @@ stringer_t * st_alloc_opts(uint32_t opts, size_t len) {
 #ifdef  MAGMA_ENGINE_CONFIG_GLOBAL_H
 			avail = align(magma.page_length, len);
 #else
-		avail = align(CORE_PAGE_LENGTH, len);
+			avail = align(CORE_PAGE_LENGTH, len);
 #endif
 			//Then truncate the file to ensure it matches the memory map size.
 			if (avail && (handle = spool_mktemp(MAGMA_SPOOL_DATA, "mapped")) != -1 && ftruncate64(handle, avail) == 0 && (result = allocate(sizeof(mapped_t))) &&
