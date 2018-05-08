@@ -346,7 +346,12 @@ START_TEST (check_inx_append_s) {
 	bool_t outcome = true;
 	stringer_t *errmsg = MANAGEDBUF(1024);
 
+#ifdef MAGMA_PROVIDE_TOKYO_PRIVATE_H
 	outcome = check_inx_append_sthread(M_INX_TREE, errmsg);
+#else
+	// Tree tests should fail without tree support, in which case we negate the result and wipe the error message buffer.
+	if ((outcome = !check_inx_append_sthread(M_INX_TREE, errmsg))) st_wipe(errmsg);
+#endif
 	if (outcome) outcome = check_inx_append_sthread(M_INX_HASHED, errmsg);
 	if (outcome) outcome = check_inx_append_sthread(M_INX_LINKED, errmsg);
 
@@ -361,7 +366,12 @@ START_TEST (check_inx_append_m) {
 	bool_t outcome = true;
 	stringer_t *errmsg = MANAGEDBUF(1024);
 
+#ifdef MAGMA_PROVIDE_TOKYO_PRIVATE_H
 	outcome = check_inx_append_mthread(M_INX_TREE, errmsg);
+#else
+	// Tree tests should fail without tree support, in which case we negate the result and wipe the error message buffer.
+	if ((outcome = !check_inx_append_mthread(M_INX_TREE, errmsg))) st_wipe(errmsg);
+#endif
 	if (outcome) outcome = check_inx_append_mthread(M_INX_HASHED, errmsg);
 	if (outcome) outcome = check_inx_append_mthread(M_INX_LINKED, errmsg);
 
@@ -956,14 +966,18 @@ Suite * suite_check_core(void) {
 	suite_check_testcase(s, "CORE", "Indexes / Linked/M", check_inx_linked_m);
 	suite_check_testcase(s, "CORE", "Indexes / Hashed/S", check_inx_hashed_s);
 	suite_check_testcase(s, "CORE", "Indexes / Hashed/M", check_inx_hashed_m);
+#ifdef MAGMA_PROVIDE_TOKYO_PRIVATE_H
 	suite_check_testcase(s, "CORE", "Indexes / Tree/S", check_inx_tree_s);
 	suite_check_testcase(s, "CORE", "Indexes / Tree/M", check_inx_tree_m);
+#endif
 	suite_check_testcase(s, "CORE", "Indexes / Linked Cursor/S", check_inx_linked_cursor_s);
 	suite_check_testcase(s, "CORE", "Indexes / Linked Cursor/M", check_inx_linked_cursor_m);
 	suite_check_testcase(s, "CORE", "Indexes / Hashed Cursor/S", check_inx_hashed_cursor_s);
 	suite_check_testcase(s, "CORE", "Indexes / Hashed Cursor/M", check_inx_hashed_cursor_m);
+#ifdef MAGMA_PROVIDE_TOKYO_PRIVATE_H
 	suite_check_testcase(s, "CORE", "Indexes / Tree Cursor/S", check_inx_tree_cursor_s);
 	suite_check_testcase(s, "CORE", "Indexes / Tree Cursor/M", check_inx_tree_cursor_m);
+#endif
 	suite_check_testcase(s, "CORE", "Indexes / Append/S", check_inx_append_s);
 	suite_check_testcase(s, "CORE", "Indexes / Append/M", check_inx_append_m);
 
