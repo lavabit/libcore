@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/memory/align.c
+ * @file /magma/core/memory/align.c
  *
  * @brief	Functions for memory alignment operations.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /***
  * @brief	Align a size to a specified boundary.

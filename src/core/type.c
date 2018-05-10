@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/type.c
+ * @file /magma/core/type.c
  *
  * @brief	A function for translating the M_TYPE enum into an equivalent string, typically so that a type code can be recorded as a string in error messages.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  *

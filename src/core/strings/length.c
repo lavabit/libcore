@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/strings/length.c
+ * @file /magma/core/strings/length.c
  *
  * @brief	Fnctions used to find stringer lengths.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Return the length of the data in a managed string.

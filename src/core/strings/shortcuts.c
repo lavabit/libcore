@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/strings/shortcuts.c
+ * @file /magma/core/strings/shortcuts.c
  *
  * @brief	A collection of shortcuts used to call various string functions using sensible default values.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Return a zero-length placer pointing to NULL data.

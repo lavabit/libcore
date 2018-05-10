@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/strings/data.c
+ * @file /magma/core/strings/data.c
  *
  * @brief	Functions used to inspect the data of managed strings.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	A simple method for checking multiple managed strings to see if all of them contain data.

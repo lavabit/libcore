@@ -1,13 +1,11 @@
 
 /**
- * @file /libcore/core/compare/equal.c
+ * @file /magma/core/compare/equal.c
  *
  * @brief	Functions to check for string equality.
  */
 
-#include "core.h"
-
-#include "../../../lib/sources/dkim/opendkim/opendkim-ar.h"
+#include "magma.h"
 
 /**
  * @brief	Perform a case-sensitive comparison of two memory blocks.

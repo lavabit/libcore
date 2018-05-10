@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/parsers/special/special.h
+ * @file /magma/core/parsers/special/special.h
  *
  * @brief	Declarations for functions involved in extracting data from specialized formats.
  */

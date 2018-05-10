@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/parsers/token.c
+ * @file /magma/core/parsers/token.c
  *
  * @brief	Functions for tokenizing strings.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Count the number of times a token is found in a specified block of memory.

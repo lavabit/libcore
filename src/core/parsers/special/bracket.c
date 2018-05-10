@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/parsers/special/bracket.c
+ * @file /magma/core/parsers/special/bracket.c
  *
  * @brief	Functions for extracting a value inside a pair of brackets.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Get a pointer to a block of data between a pair of brackets.

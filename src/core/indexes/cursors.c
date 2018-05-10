@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/indexes/cursors.c
+ * @file /magma/core/indexes/cursors.c
  *
  * @brief	The generic index interface for handling cursors.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Reset the position of an inx cursor.

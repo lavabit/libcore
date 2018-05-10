@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/strings/opts.c
+ * @file /magma/core/strings/opts.c
  *
  * @brief	Functions for handling managed string options.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Returns the options variable from a string to the caller. Is intended for use by functions outside of string library.

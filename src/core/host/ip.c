@@ -1,12 +1,12 @@
 
 /**
- * @file /libcore/src/core/host/ip.c
+ * @file /magma/src/core/host/ip.c
  *
  * @brief Generic interface for parsing, and manipulating the IP address structure.
  *
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	An abstract method of retrieving the address family for an IP structure.
@@ -317,7 +317,7 @@ stringer_t * ip_presentation(ip_t *address, stringer_t *output) {
 
 	// Write the address out.
 	if (!(ret = (chr_t *)inet_ntop(address->family, (address->family == AF_INET ? (void *)&(address->ip4.s_addr) : (void *)&(address->ip6.__in6_u.__u6_addr32)), st_char_get(result), len))) {
-		log_pedantic("An error occurred while trying to translate the address into a string. {inet_ntop = NULL / error = %s}", strerror_r(errno, bufptr, buflen));
+		log_pedantic("An error occurred while trying to translate the address into a string. {inet_ntop = NULL / error = %s}", strerror_r(errno, MEMORYBUF(1024), 1024));
 		if (!output) st_free(result);
 		return NULL;
 	}

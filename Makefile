@@ -14,11 +14,11 @@ PACKAGE_URL				= https://lavabit.com
 
 TOPDIR					= $(realpath .)
 
-LIBCORE_CHECK_SRCDIR		= check/core
-LIBCORE_CHECK_PROGRAM		= core.check$(EXEEXT)
-LIBCORE_CHECK_INCLUDES		= -Icheck/core -Isrc/core
+LIBCORE_CHECK_SRCDIR	= check
+LIBCORE_CHECK_PROGRAM	= core.check$(EXEEXT)
+LIBCORE_CHECK_INCLUDES	= -Icheck -Isrc/core
 
-LIBCORE_SRCDIR			= src/core
+LIBCORE_SRCDIR			= src
 LIBCORE_SHARED			= libcore$(DYNLIBEXT)
 LIBCORE_STATIC			= libcore$(STATLIBEXT)
 LIBCORE_PROGRAMS		=
@@ -28,7 +28,7 @@ LIBCORE_DEPFILES		= $(call DEPFILES, $(call SRCFILES, src check)) $(call DEPFILE
 LIBCORE_STRIPPED		= libcore-stripped$(STATLIBEXT) libcore-stripped$(DYNLIBEXT)
 LIBCORE_DEPENDENCIES	=
 
-LIBCORE_REPO				= $(shell which git &> /dev/null && git log &> /dev/null && echo 1)
+LIBCORE_REPO			= $(shell which git &> /dev/null && git log &> /dev/null && echo 1)
 ifneq ($(strip $(LIBCORE_REPO)),1)
 	LIBCORE_VERSION			:= $(PACKAGE_VERSION)
 	LIBCORE_COMMIT			:= "NONE"
@@ -36,7 +36,7 @@ else
 	LIBCORE_VERSION			:= $(PACKAGE_VERSION).$(shell git log --format='%H' | wc -l)
 	LIBCORE_COMMIT			:= $(shell git log --format="%H" -n 1 | cut -c33-40)
 endif
-LIBCORE_TIMESTAMP			= $(shell date +'%Y%m%d.%H%M')
+LIBCORE_TIMESTAMP		= $(shell date +'%Y%m%d.%H%M')
 
 # Dependency Files
 DEPDIR					= .deps
@@ -53,20 +53,22 @@ CPPFILES				= $(foreach dir, $(call SRCDIRS, $(1)), $(wildcard $(dir)/*.cpp))
 SRCFILES				= $(foreach dir, $(call SRCDIRS, $(1)), $(wildcard $(dir)/*.c))
 
 # Setup the Defines
-DEFINES					+= -D_REENTRANT -DFORTIFY_SOURCE=2 -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DHAVE_NS_TYPE -DCORE_BUILD=$(LIBCORE_VERSION) -DCORE_STAMP=$(LIBCORE_TIMESTAMP)
+DEFINES					+= -D_REENTRANT -DFORTIFY_SOURCE=2 -D_GNU_SOURCE -D_LARGEFILE64_SOURCE -DHAVE_NS_TYPE -DCORE_VERSION=\"$(LIBCORE_VERSION)\" -DCORE_COMMIT=\"$(LIBCORE_COMMIT)\" -DCORE_TIMESTAMP=\"$(LIBCORE_TIMESTAMP)\"
 
-INCLUDES				= -Ilib/local/include -I/usr/include
+INCLUDES				= -Ilib/local/include -I/usr/include -Isrc -Icheck/core -Isrc/core -Icheck
 WARNINGS				= -Wfatal-errors -Werror -Wall -Wextra -Wformat-security -Warray-bounds  -Wformat=2 -Wno-format-nonliteral
 
-# C Compiler
+# Compiler Parameters
 CC						= gcc
-CFLAGS					= $(DEFINES) $(WARNINGS) -std=gnu99 -O0 -ggdb3 -rdynamic -fPIC -c -MMD
+CFLAGS					= -std=gnu99 -O0 -fPIC -fmessage-length=0 -ggdb3 -rdynamic -c $(CFLAGS_WARNINGS) -MMD 
+CFLAGS_WARNINGS			= -Wall -Werror -Winline -Wformat-security -Warray-bounds #-Wfatal-errors
+CFLAGS_PEDANTIC			= -Wextra -Wpacked -Wunreachable-code -Wformat=2
 
-# CPP Compiler
 CPP						= g++
-CPPFLAGS				= -std=c++0x $(WARNINGS) -Wno-unused-parameter $(DEFINES) -DGTEST_TAP_PRINT_TO_STDOUT -DGTEST_HAS_PTHREAD=1 -pthread -g3
+CPPFLAGS				= -std=c++0x $(CPPFLAGS_WARNINGS) -Wno-unused-parameter -pthread -g3 
+CPPFLAGS_WARNINGS		= -Werror -Wall -Wextra -Wformat=2 -Wwrite-strings -Wno-format-nonliteral #-Wfatal-errors
 
-# Linker
+# Linker Parameters
 LD						= gcc
 LDFLAGS					= -rdynamic
 
@@ -77,6 +79,12 @@ ARFLAGS					= rcs
 # Strip Parameters
 STRIP					= strip
 STRIPFLAGS				= --strip-debug
+
+# GProf Parameters
+GPROF					= -pg -finstrument-functions -fprofile-arcs -ftest-coverage
+
+# PProf Parameters
+PPROF					= -lprofiler
 
 # Other External programs
 MV						= mv --force
@@ -132,7 +140,7 @@ ifeq ($(VERBOSE),no)
 	@echo 'Finished' $(BOLD)$(GREEN)$(TARGETGOAL)$(NORMAL)
 endif
 
-warning:
+warning: config
 ifeq ($(VERBOSE),no)
 	@echo
 	@echo 'For a more verbose output'
@@ -141,6 +149,10 @@ ifeq ($(VERBOSE),no)
 endif
 
 config:
+ifeq ($(strip $(LIBCORE_REPO)),1)
+	@git update-index --assume-unchanged .project
+	@git update-index --assume-unchanged .cproject
+endif
 	@echo
 	@echo 'TARGET' $(TARGETGOAL)
 	@echo 'VERBOSE' $(VERBOSE)
@@ -178,13 +190,7 @@ distclean:
 	@$(RM) --recursive --force $(DEPDIR) $(OBJDIR)
 	@echo 'Finished' $(BOLD)$(GREEN)$(TARGETGOAL)$(NORMAL)
 
-$(LIBCORE_DEPENDENCIES): res/scripts/build.deps.sh res/scripts/build.deps.params.sh
-ifeq ($(VERBOSE),no)
-	@echo 'Running' $(RED)$(<F)$(NORMAL)
-else
-	@echo
-endif
-	$(RUN)res/scripts/build.deps.sh all
+$(LIBCORE_DEPENDENCIES): 
 
 $(LIBCORE_STRIPPED): $(LIBCORE_SHARED) $(LIBCORE_STATIC) $(LIBCORE_PROGRAMS)
 ifeq ($(VERBOSE),no)
@@ -205,7 +211,7 @@ endif
 	$(RUN)$(LD) $(LDFLAGS) --output='$@' $(call OBJFILES, $(call CPPFILES, $(LIBCORE_CHECK_SRCDIR))) \
 	 $(call OBJFILES, $(call CCFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call SRCFILES, $(LIBCORE_CHECK_SRCDIR))) \
 	-Wl,--start-group,--whole-archive $(LIBCORE_DEPENDENCIES) $(LIBCORE_STATIC) $(CORE_CHECK_GTEST) -Wl,--no-whole-archive,--end-group \
-	-lresolv -lrt -ldl -lm -lstdc++ -lpthread
+	-lresolv -lrt -ldl -lm -lstdc++ -lpthread -lcheck
 
 # Construct the dime executable
 $(CORE_PROGRAM): $(LIBCORE_DEPENDENCIES) $(call OBJFILES, $(call SRCFILES, $(CORE_SRCDIR))) $(LIBCORE_STATIC)
@@ -245,7 +251,7 @@ endif
 	@test -d $(OBJDIR)/$(dir $<) || $(MKDIR) $(OBJDIR)/$(dir $<)
 	$(RUN)$(CC) $(CFLAGS) $(CFLAGS.$(<F)) $(DEFINES) $(DEFINES.$(<F)) $(INCLUDES) -MF"$(<:%.c=$(DEPDIR)/%.d)" -MT"$@" -o"$@" "$<"
 
-$(OBJDIR)/check/core/%.o: check/core/%.c
+$(OBJDIR)/check/%.o: check/%.c
 ifeq ($(VERBOSE),no)
 	@echo 'Building' $(YELLOW)$<$(NORMAL)
 endif
@@ -266,8 +272,4 @@ endif
 
 # Special Make Directives
 .SUFFIXES: .c .cc .cpp .o
-.NOTPARALLEL: warning conifg $(LIBCORE_DEPENDENCIES)
 .PHONY: warning config finished all check stripped
-
-
-# vim:set softtabstop=4 shiftwidth=4 tabstop=4:

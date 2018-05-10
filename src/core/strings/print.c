@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/strings/print.c
+ * @file /magma/core/strings/print.c
  *
  * @brief	Functions for printing formatted data to managed strings.
  */
 
-#include "core.h"
+#include "magma.h"
 
 /**
  * @brief	Print to a managed string and return the number of bytes written.

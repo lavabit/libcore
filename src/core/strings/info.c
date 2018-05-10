@@ -1,11 +1,11 @@
 
 /**
- * @file /libcore/core/strings/info.c
+ * @file /magma/core/strings/info.c
  *
  * @brief	A collection of functions used to extract information from stringer options.
  */
 
-#include "core.h"
+#include "magma.h"
 
 chr_t *st_option_flags[] = {
 	"FOREIGNDATA"

@@ -1,215 +1,123 @@
 
 /**
- * @file /check/magma/magma_check.h
+ * @file /check/magma/core/core_check.h
  *
- * @brief The entry point for accessing the modules involved with executing unit tests.
+ * @brief The entry point for the core module test suite.
  */
 
-#ifndef MAGMA_CHECK_H
-#define MAGMA_CHECK_H
+#ifndef CORE_CHECK_H
+#define CORE_CHECK_H
 
-#include "magma.h"
+typedef struct {
+	inx_t *inx;
+	uint64_t type;
+} check_inx_opt_t;
 
-#include <ctype.h>
-#include <sys/ptrace.h>
-#include <sys/wait.h>
-#include <check.h>
-#include <valgrind/valgrind.h>
+struct check_mi_t {
+	int nr;
+	char *name;
+};
 
-// Normally the START_TEST macro creates a static testcase function. Unfortunately we can't
-// find those symbols using dlsym() so we can't dynamically select individual test cases at
-// runtime. This redefines the macro without using the static keyword to workaround this problem.
-#undef START_TEST
-#define START_TEST(__testname) void __testname (int _i CK_ATTRIBUTE_UNUSED) {  tcase_fn_start (""# __testname, __FILE__, __LINE__);
+extern stringer_t *string_check_constant;
 
-#include "data/data_check.h"
-#include "core/core_check.h"
-#include "providers/provide_check.h"
-#include "prime/prime_check.h"
-#include "engine/engine_check.h"
-#include "network/network_check.h"
-#include "objects/objects_check.h"
-#include "users/users_check.h"
-#include "mail/mail_check.h"
-#include "servers/smtp/smtp_check.h"
-#include "servers/pop/pop_check.h"
-#include "servers/imap/imap_check.h"
-#include "servers/http/http_check.h"
-#include "servers/camel/camel_check.h"
-#include "regression/regression_check.h"
-#include "config/config_check.h"
+/// clamp_check.c
+chr_t * check_clamp_max(void);
+chr_t * check_clamp_min(void);
+chr_t * check_clamp_randomizer(void);
+chr_t * check_clamp_min_max_equal(void);
+chr_t * check_clamp_min_max_invalid(void);
 
-extern int case_timeout;
+/// string_check.c
+bool_t   check_string_alloc(uint32_t check);
+bool_t   check_string_dupe(uint32_t check);
+bool_t   check_string_import(void);
+bool_t   check_string_merge(void);
+bool_t   check_string_print(void);
+bool_t   check_string_write(void);
+bool_t   check_string_realloc(uint32_t check);
 
-#define log_unit(...) log_internal (__FILE__, __FUNCTION__, __LINE__, M_LOG_LINE_FEED_DISABLE | M_LOG_TIME_DISABLE | M_LOG_FILE_DISABLE | M_LOG_LINE_DISABLE | M_LOG_FUNCTION_DISABLE | M_LOG_STACK_TRACE_DISABLE, __VA_ARGS__)
-//#define testcase(s, tc, name, func) tcase_add_test((tc = tcase_create(name)), func); tcase_set_timeout(tc, case_timeout); suite_add_tcase(s, tc)
+/// qp_check.c
+bool_t   check_encoding_qp(void);
 
-Suite * suite_check_sample(void);
-void log_test(chr_t *test, stringer_t *error);
-void suite_check_testcase(Suite *s, const char *tags, const char *name, TFun func);
+/// inx_check.c
+bool_t   check_inx_append_helper(inx_t *inx);
+bool_t   check_inx_append_mthread(MAGMA_INDEX inx_type, stringer_t *errmsg);
+void     check_inx_append_mthread_test(inx_t *inx);
+bool_t   check_inx_append_sthread(MAGMA_INDEX inx_type, stringer_t *errmsg);
+bool_t   check_inx_cursor_mthread(check_inx_opt_t *opts);
+void     check_inx_cursor_mthread_cnv(check_inx_opt_t *opts);
+bool_t   check_inx_cursor_sthread(check_inx_opt_t *opts);
+bool_t   check_inx_mthread(check_inx_opt_t *opts);
+void     check_inx_mthread_cnv(check_inx_opt_t *opts);
+bool_t   check_inx_sthread(check_inx_opt_t *opts);
 
-#endif
+/// ip_check.c
+bool_t check_uint16_to_hex_st(uint16_t val, stringer_t *buff);
+bool_t check_ip_private_sthread(stringer_t *errmsg);
+bool_t check_ip_localhost_sthread(stringer_t *errmsg);
 
-//! Quick Test
-#if 1
-#define RUN_TEST_CASE_TIMEOUT 100
-#define PROFILE_TEST_CASE_TIMEOUT 1000
+/// linked_check.c
+bool_t   check_indexes_linked_cursor(char **errmsg);
+bool_t   check_indexes_linked_cursor_compare(uint64_t values[], inx_cursor_t *cursor);
+bool_t   check_indexes_linked_simple(char **errmsg);
 
-#define INX_CHECK_MTHREADS 2
-#define INX_CHECK_OBJECTS 1024
+/// hex_check.c
+bool_t   check_encoding_hex(void);
 
-#define IP_CHECK_ROUNDS 10
+/// url_check.c
+bool_t   check_encoding_url(void);
 
-#define TREE_INSERTS_CHECK 128
-#define TREE_CURSORS_CHECK 128
-#define LINKED_INSERTS_CHECK 128
-#define LINKED_CURSORS_CHECK 128
-#define HASHED_INSERTS_CHECK 128
-#define HASHED_CURSORS_CHECK 128
+/// core_check.c
+Suite *  suite_check_core(void);
 
-#define QP_CHECK_SIZE 1024
-#define URL_CHECK_SIZE 1024
-#define HEX_CHECK_SIZE 1024
-#define BASE64_CHECK_SIZE 1024
-#define ZBASE32_CHECK_SIZE 1024
-#define CHECKSUM_CHECK_SIZE 1024
+/// base64_check.c
+bool_t   check_encoding_base64(bool_t secure_on);
+bool_t   check_encoding_base64_mod(bool_t secure_on);
 
-#define QP_CHECK_ITERATIONS 16
-#define URL_CHECK_ITERATIONS 16
-#define HEX_CHECK_ITERATIONS 16
-#define BASE64_CHECK_ITERATIONS 16
-#define ZBASE32_CHECK_ITERATIONS 16
-#define CHECKSUM_CHECK_ITERATIONS 16
+/// hashed_check.c
+bool_t   check_indexes_hashed_cursor(char **errmsg);
+bool_t   check_indexes_hashed_cursor_compare(uint64_t values[], inx_cursor_t *cursor);
+bool_t   check_indexes_hashed_simple(char **errmsg);
 
-#define TANK_CHECK_DATA_HNUM 1L
-#define TANK_CHECK_DATA_UNUM 1L
-#define TANK_CHECK_DATA_MTHREADS 2 // Disabled
-#define TANK_CHECK_DATA_CLEANUP true
+/// system_check.c
+bool_t   check_system_errnonames(void);
+bool_t   check_system_signames(void);
 
-#define DSPAM_CHECK_SIZE_MIN 1024
-#define DSPAM_CHECK_SIZE_MAX (2 * 1024)
-#define DSPAM_CHECK_DATA_UNUM 1L
-#define DSPAM_CHECK_ITERATIONS 128
+/// tree_check.c
+bool_t   check_indexes_tree_cursor(char **errmsg);
+bool_t   check_indexes_tree_cursor_compare(uint64_t values[], inx_cursor_t *cursor);
+bool_t   check_indexes_tree_simple(char **errmsg);
 
-// Controls the size of the compression test block.
-#define COMPRESS_CHECK_SIZE_MIN 1024 // 1 kilobyte
-#define COMPRESS_CHECK_SIZE_MAX (2 * 1024) // 2 kilobytes
-#define COMPRESS_CHECK_MTHREADS 2 // Disabled
-#define COMPRESS_CHECK_ITERATIONS 16
+/// qsort_check.c
+int   check_bsearch_compare(const void *m1, const void *m2);
+int   check_bsearch_months(int num, char *name);
 
-#define RAND_CHECK_SIZE_MIN 64
-#define RAND_CHECK_SIZE_MAX 128
-#define RAND_CHECK_ITERATIONS 128
-#define RAND_CHECK_MTHREADS 2
+/// zbase32_check.c
+bool_t   check_encoding_zbase32(void);
 
-#define SCRAMBLE_CHECK_SIZE_MIN (1024) // 1 kilobyte
-#define SCRAMBLE_CHECK_SIZE_MAX (2 * 1024) // 2 kilobytes
-#define SCRAMBLE_CHECK_ITERATIONS 16
+/// nbo_check.c
+bool_t   check_nbo_simple(void);
+bool_t   check_nbo_parameters(void);
 
-#define DIGEST_CHECK_SIZE 1024
-#define DIGEST_CHECK_ITERATIONS 16
+/// bitwise_check.c
+bool_t   check_bitwise_parameters(void);
+bool_t   check_bitwise_determinism(void);
+bool_t   check_bitwise_simple(void);
 
-#define SYMMETRIC_CHECK_SIZE_MIN 64
-#define SYMMETRIC_CHECK_SIZE_MAX (2 * 1024) // 2 kilobytes
-#define SYMMETRIC_CHECK_ITERATIONS 16
+/// checksum_check.c
+bool_t check_checksum_fuzz_sthread(void);
+bool_t check_checksum_fixed_sthread(void);
+bool_t check_checksum_loop_sthread(void);
 
-#define ECIES_CHECK_SIZE_MIN 64
-#define ECIES_CHECK_SIZE_MAX (2 * 1024) // 2 kilobytes
-#define ECIES_CHECK_ITERATIONS 16
-
-#define PRIME_CHECK_SIZE_MIN 64
-#define PRIME_CHECK_SIZE_MAX (2 * 1024) // 2 kilobytes
-#define PRIME_CHECK_ITERATIONS 16
-#define PRIME_CHECK_SPANNING_CHUNK_SIZE (1024 * 1024 * 20) // 20 megabytes
-
-#define OBJECT_CHECK_ITERATIONS 16
-
-#define MAIL_CHECK_LOAD_MAX 64 // Maximum number of messages loaded per user.
-
-#define REGRESSION_CHECK_FILE_DESCRIPTORS_LEAK_MTHREADS 8
-
-//! Exhaustive Test
-#else
-
-// Maximum number of seconds for a given test case.
-#define RUN_TEST_CASE_TIMEOUT 86400
-#define PROFILE_TEST_CASE_TIMEOUT 864000
-
-#define INX_CHECK_MTHREADS 8
-#define INX_CHECK_OBJECTS 8192
-
-#define TREE_INSERTS_CHECK 8192
-#define TREE_CURSORS_CHECK 8192
-#define LINKED_INSERTS_CHECK 8192
-#define LINKED_CURSORS_CHECK 8192
-#define HASHED_INSERTS_CHECK 8192
-#define HASHED_CURSORS_CHECK 8192
-
-#define QP_CHECK_SIZE 8192
-#define URL_CHECK_SIZE 8192
-#define HEX_CHECK_SIZE 8192
-#define BASE64_CHECK_SIZE 8192
-#define ZBASE32_CHECK_SIZE 8192
-#define CHECKSUM_CHECK_SIZE 8192
-
-#define QP_CHECK_ITERATIONS 8192
-#define URL_CHECK_ITERATIONS 8192
-#define HEX_CHECK_ITERATIONS 8192
-#define BASE64_CHECK_ITERATIONS 8192
-#define ZBASE32_CHECK_ITERATIONS 8192
-#define CHECKSUM_CHECK_ITERATIONS 8192
-
-#define TANK_CHECK_DATA_HNUM 1L
-#define TANK_CHECK_DATA_UNUM 1L
-#define TANK_CHECK_DATA_MTHREADS 8
-#define TANK_CHECK_DATA_CLEANUP true
-
-#define DSPAM_CHECK_DATA_UNUM 1L
-#define DSPAM_CHECK_ITERATIONS 8192
-#define DSPAM_CHECK_SIZE_MIN 1024
-#define DSPAM_CHECK_SIZE_MAX (16 * 1024)
-//#define DSPAM_CHECK_SIZE_MAX (1 * 1024 * 1024) // 1 megabyte
-
-#define COMPRESS_CHECK_MTHREADS 8
-#define COMPRESS_CHECK_ITERATIONS 256
-#define COMPRESS_CHECK_SIZE_MIN 1024 // 1 kilobyte
-#define COMPRESS_CHECK_SIZE_MAX (16 * 1024)
-//#define COMPRESS_CHECK_SIZE_MAX (1 * 1024 * 1024) // 1 megabyte
-
-#define RAND_CHECK_MTHREADS 8
-#define RAND_CHECK_ITERATIONS 256
-#define RAND_CHECK_SIZE_MIN 1024 // 1 kilobyte
-#define RAND_CHECK_SIZE_MAX (16 * 1024)
-//#define RAND_CHECK_SIZE_MAX (1 * 1024 * 1024) // 1 megabyte
-
-#define ECIES_CHECK_ITERATIONS 256
-#define ECIES_CHECK_SIZE_MIN 1024 // 1 kilobyte
-#define ECIES_CHECK_SIZE_MAX (16 * 1024)
-//#define ECIES_CHECK_SIZE_MAX (1 * 1024 * 1024) // 1 megabyte
-
-#define PRIME_CHECK_ITERATIONS 256
-#define PRIME_CHECK_SIZE_MIN (1024) // 1 kilobyte
-#define PRIME_CHECK_SIZE_MAX (1 * 1024 * 1024) // 1 megabyte
-#define PRIME_CHECK_SPANNING_CHUNK_SIZE (1024 * 1024 * 256) // 256 megabytes
-
-#define SCRAMBLE_CHECK_ITERATIONS 256
-#define SCRAMBLE_CHECK_SIZE_MIN 1024 // 1 kilobyte
-#define SCRAMBLE_CHECK_SIZE_MAX (16 * 1024)
-//#define SCRAMBLE_CHECK_SIZE_MAX (1 * 1024 * 1024) // 1 megabyte
-
-#define DIGEST_CHECK_ITERATIONS 256
-#define DIGEST_CHECK_SIZE (16 * 1024)
-//#define DIGEST_CHECK_SIZE (1 * 1024 * 1024) // 1 megabyte
-
-#define SYMMETRIC_CHECK_ITERATIONS 256
-#define SYMMETRIC_CHECK_SIZE_MIN 1024 // 1 kilobyte
-#define SYMMETRIC_CHECK_SIZE_MAX (16 * 1024)
-//#define SYMMETRIC_CHECK_SIZE_MAX (1 * 1024 * 1024) // 1 megabyte
-
-#define OBJECT_CHECK_ITERATIONS 256
-
-#define MAIL_CHECK_LOAD_MAX UINT64_MAX // Maximum number of messages loaded per user.
-
-#define REGRESSION_CHECK_FILE_DESCRIPTORS_LEAK_MTHREADS 32
+/// ip_check.c
+void     check_address_octet_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_presentation_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_reversed_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_segment_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_standard_s (int _i CK_ATTRIBUTE_UNUSED);
+void     check_address_subnet_s (int _i CK_ATTRIBUTE_UNUSED);
+bool_t   check_ip_localhost_sthread(stringer_t *errmsg);
+bool_t   check_ip_private_sthread(stringer_t *errmsg);
+bool_t   check_uint16_to_hex_st(uint16_t val, stringer_t *buff);
 
 #endif

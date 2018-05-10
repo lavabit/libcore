@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/parsers/formats/formats.h
+ * @file /magma/core/parsers/formats/formats.h
  *
  * @brief	Function declarations and types used by the structured format parsers.
  */

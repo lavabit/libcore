@@ -1,6 +1,6 @@
 
 /**
- * @file /libcore/core/parsers/parsers.h
+ * @file /magma/core/parsers/parsers.h
  *
  * @brief The function decelerations and types needed by the generic parsing functions.
  */
