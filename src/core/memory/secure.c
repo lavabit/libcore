@@ -447,7 +447,6 @@ bool_t mm_sec_start(void) {
 	}
 #endif
 
-
 	// We also request the address range assigned be locked into memory using the mlock call.
 	if (mlock(secure.slab.data, secure.slab.length)) {
 		log_pedantic("Unable to lock the address space reserved for sensitive data in memory.");

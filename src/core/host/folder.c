@@ -25,7 +25,8 @@ int_t folder_exists(stringer_t *path, bool_t create) {
 		else {
 			result = 1;
 		}
-	} else {
+	}  
+	else {
 		closedir(d);
 	}
 

@@ -730,7 +730,7 @@ stringer_t * st_realloc(stringer_t *s, size_t len) {
 #ifdef  MAGMA_ENGINE_CONFIG_GLOBAL_H
 			avail = align(magma.page_length, len);
 #else
-		avail = align(CORE_PAGE_LENGTH, len);
+			avail = align(CORE_PAGE_LENGTH, len);
 #endif
 
 			// If the new length is larger, we will increase the file size using the ftruncate64 function.
