@@ -210,8 +210,8 @@ else
 endif
 	$(RUN)$(LD) $(LDFLAGS) --output='$@' $(call OBJFILES, $(call CPPFILES, $(LIBCORE_CHECK_SRCDIR))) \
 	 $(call OBJFILES, $(call CCFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call SRCFILES, $(LIBCORE_CHECK_SRCDIR))) \
-	-lresolv -lrt -ldl -lm -lstdc++ -lpthread -lcheck \
-	-Wl,--start-group,--whole-archive $(LIBCORE_DEPENDENCIES) $(LIBCORE_STATIC) $(CORE_CHECK_GTEST) -Wl,--no-whole-archive,--end-group
+	-Wl,--start-group,--whole-archive $(LIBCORE_DEPENDENCIES) $(LIBCORE_STATIC) $(CORE_CHECK_GTEST) -Wl,--no-whole-archive,--end-group \
+	-lresolv -ldl -lstdc++ -lpthread -lcheck -lm -lrt 
 
 # Construct the dime executable
 $(CORE_PROGRAM): $(LIBCORE_DEPENDENCIES) $(call OBJFILES, $(call SRCFILES, $(CORE_SRCDIR))) $(LIBCORE_STATIC)
