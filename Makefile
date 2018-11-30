@@ -7,7 +7,7 @@
 # Identity of this package.
 PACKAGE_NAME			= libcore
 PACKAGE_TARNAME			= libcore
-PACKAGE_VERSION			= 0.1
+PACKAGE_VERSION			= 0.2
 PACKAGE_STRING			= $(PACKAGE_NAME) $(PACKAGE_VERSION)
 PACKAGE_BUGREPORT		= support@lavabit.com
 PACKAGE_URL				= https://lavabit.com
@@ -58,76 +58,128 @@ DEFINES					+= -D_REENTRANT -DFORTIFY_SOURCE=2 -D_GNU_SOURCE -D_LARGEFILE64_SOUR
 INCLUDES				= -Ilib/local/include -I/usr/include -Isrc -Icheck/core -Isrc/core -Icheck
 WARNINGS				= -Wfatal-errors -Werror -Wall -Wextra -Wformat-security -Warray-bounds  -Wformat=2 -Wno-format-nonliteral
 
-# Compiler Parameters
-CC						= gcc
-CFLAGS					= -std=gnu99 -O0 -fPIC -fmessage-length=0 -ggdb3 -rdynamic -c $(CFLAGS_WARNINGS) -MMD 
-CFLAGS_WARNINGS			= -Wall -Werror -Winline -Wformat-security -Warray-bounds #-Wfatal-errors
-CFLAGS_PEDANTIC			= -Wextra -Wpacked -Wunreachable-code -Wformat=2
-
-CPP						= g++
-CPPFLAGS				= -std=c++0x $(CPPFLAGS_WARNINGS) -Wno-unused-parameter -pthread -g3 
-CPPFLAGS_WARNINGS		= -Werror -Wall -Wextra -Wformat=2 -Wwrite-strings -Wno-format-nonliteral #-Wfatal-errors
-
-# Linker Parameters
-LD						= gcc
-LDFLAGS					= -rdynamic
-
-# Archiver Parameters
-AR						= ar
-ARFLAGS					= rcs
-
-# Strip Parameters
-STRIP					= strip
-STRIPFLAGS				= --strip-debug
-
-# GProf Parameters
-GPROF					= -pg -finstrument-functions -fprofile-arcs -ftest-coverage
-
-# PProf Parameters
-PPROF					= -lprofiler
-
-# Other External programs
-MV						= mv --force
-RM						= rm --force
-RMDIR					= rmdir --parents --ignore-fail-on-non-empty
-MKDIR					= mkdir --parents
-RANLIB					= ranlib
-
-# Text Coloring
-RED						= $$(tput setaf 1)
-BLUE					= $$(tput setaf 4)
-GREEN					= $$(tput setaf 2)
-WHITE					= $$(tput setaf 7)
-YELLOW					= $$(tput setaf 3)
-
-# Text Weighting
-BOLD					= $$(tput bold)
-NORMAL					= $$(tput sgr0)
-
-ifeq ($(OS),Windows_NT)
-    HOSTTYPE 			:= Windows
-    DYNLIBEXT			:= .dll
-    STATLIBEXT			:= .lib
-    EXEEXT 				:= .exe
-else
-    HOSTTYPE			:= $(shell uname -s)
-    DYNLIBEXT			:= .so
-    STATLIBEXT			:= .a
-    EXEEXT				:=
+# C Compiler
+ifeq ($(patsubst undefined,default,$(origin CC)),default)
+CC  = gcc
 endif
 
+# C++ Preprocessor
+ifeq ($(patsubst undefined,default,$(origin CPP)),default)
+CPP  = gcc
+endif
+
+# C++ Compiler
+ifeq ($(patsubst undefined,default,$(origin CXX)),default)
+CXX  = gcc
+endif
+
+# Linker
+ifeq ($(patsubst undefined,default,$(origin LD)),default)
+LD  = gcc
+endif
+
+# Archiver
+ifeq ($(patsubst undefined,default,$(origin AR)),default)
+AR  = ar
+endif
+
+# Symbol Stripper
+ifeq ($(patsubst undefined,default,$(origin STRIP)),default)
+STRIP  = strip
+endif
+
+# File Installer
+ifeq ($(patsubst undefined,default,$(origin INSTALL)),default)
+INSTALL  = install
+endif
+
+# Archive Symbol Updater
+ifeq ($(patsubst undefined,default,$(origin RANLIB)),default)
+RANLIB  = ranlib
+endif
+
+# Verbosity Control
+ifeq ($(patsubst undefined,default,$(origin VERBOSE)),default)
+VERBOSE  = no
+endif
+
+# Quick Dependency Builds
+ifeq ($(patsubst undefined,default,$(origin QUICK)),default)
+QUICK  = yes
+endif
+
+# Compiler Parameters
+CFLAGS							?=
+CFLAGS_WARNINGS			= -Wall -Werror -Winline -Wformat-security -Warray-bounds
+CFLAGS_PEDANTIC			= -Wextra -Wpacked -Wunreachable-code -Wformat=2
+CFLAGS_COMBINED			= -std=gnu99 -O0 -fPIC -fmessage-length=0 -ggdb3 -c $(CFLAGS_WARNINGS) -MMD $(CFLAGS)
+
+CPPFLAGS						?=
+CPPFLAGS_WARNINGS		= -Werror -Wall -Wextra -Wformat=2 -Wwrite-strings -Wno-format-nonliteral
+CPPFLAGS_COMBINED		= -std=c++0x $(CPPFLAGS_WARNINGS) -Wno-unused-parameter -pthread -g3 $(CPPFLAGS)
+
+# Linker Options
+LDFLAGS                      ?=
+LDFLAGS_COMBINED              = -rdynamic $(LDFLAGS)
+
+# Archiver Options
+ARFLAGS                      ?= rcs
+
+# Strip Options
+STRIPFLAGS                   ?= --strip-debug
+
+# GProf Options
+GPROF                        ?= -pg -finstrument-functions -fprofile-arcs -ftest-coverage
+
+# PProf Options
+PPROF                        ?= -lprofiler
+
+# Miscellaneous External programs
+MV                            = mv --force
+RM                            = rm --force
+RMDIR                         = rmdir --parents --ignore-fail-on-non-empty
+MKDIR                         = mkdir --parents
+
+# Text Coloring
+RED                           = $$(tput setaf 1)
+BLUE                          = $$(tput setaf 4)
+GREEN                         = $$(tput setaf 2)
+WHITE                         = $$(tput setaf 7)
+YELLOW                        = $$(tput setaf 3)
+
+# Text Weighting
+BOLD                          = $$(tput bold)
+NORMAL                        = $$(tput sgr0)
+
 ifeq ($(VERBOSE),yes)
-RUN						=
+RUN                           =
 else
-RUN						= @
-VERBOSE					= no
+RUN                           = @
 endif
 
 # So we can tell the user what happened
 ifdef MAKECMDGOALS
-TARGETGOAL				+= $(MAKECMDGOALS)
+TARGETGOAL                   += $(MAKECMDGOALS)
 else
-TARGETGOAL				= $(.DEFAULT_GOAL)
+TARGETGOAL                   = $(.DEFAULT_GOAL)
+endif
+
+ifeq ($(OS),Windows_NT)
+  HOSTTYPE                   := "Windows"
+  LIBPREFIX                  :=
+  DYNLIBEXT                  := ".dll"
+  STATLIBEXT                 := ".lib"
+  EXEEXT                     := ".exe"
+
+  # Alias the target names on Windows to the equivalent without the exe extension.
+  $(basename $(DIME_PROGRAM)) := $(DIME_PROGRAM)
+  
+else
+  HOSTTYPE                 := $(shell uname -s)
+  LIBPREFIX                := lib
+  DYNLIBEXT                := .so
+  STATLIBEXT               := .a
+  EXEEXT                   :=
 endif
 
 all: config warning $(LIBCORE_SHARED) $(LIBCORE_STATIC) $(LIBCORE_PROGRAMS) $(LIBCORE_STRIPPED) finished
@@ -201,45 +253,36 @@ endif
 	$(RUN)$(STRIP) $(STRIPFLAGS) --output-format=$(shell objdump -p "$(subst -stripped,,$@)" | grep "file format" | head -1 | \
 	awk -F'file format' '{print $$2}' | tr --delete [:space:]) -o "$@" "$(subst -stripped,,$@)"
 
-# Construct the dime check executable
+# Construct the libcore check executable.
 $(LIBCORE_CHECK_PROGRAM): $(LIBCORE_DEPENDENCIES) $(call OBJFILES, $(call CPPFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call CCFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call SRCFILES, $(LIBCORE_CHECK_SRCDIR))) $(LIBCORE_STATIC)
 ifeq ($(VERBOSE),no)
 	@echo 'Constructing' $(RED)$@$(NORMAL)
 else
 	@echo
 endif
-	$(RUN)$(LD) $(LDFLAGS) --output='$@' $(call OBJFILES, $(call CPPFILES, $(LIBCORE_CHECK_SRCDIR))) \
+	$(RUN)$(LD) $(LDFLAGS_COMBINED) --output='$@' $(call OBJFILES, $(call CPPFILES, $(LIBCORE_CHECK_SRCDIR))) \
 	 $(call OBJFILES, $(call CCFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call SRCFILES, $(LIBCORE_CHECK_SRCDIR))) \
 	-Wl,--start-group,--whole-archive $(LIBCORE_DEPENDENCIES) $(LIBCORE_STATIC) $(CORE_CHECK_GTEST) -Wl,--no-whole-archive,--end-group \
 	-lresolv -ldl -lstdc++ -lpthread -lcheck -lm -lrt 
 
-# Construct the dime executable
-$(CORE_PROGRAM): $(LIBCORE_DEPENDENCIES) $(call OBJFILES, $(call SRCFILES, $(CORE_SRCDIR))) $(LIBCORE_STATIC)
-ifeq ($(VERBOSE),no)
-	@echo 'Constructing' $(RED)$@$(NORMAL)
-else
-	@echo
-endif
-	$(RUN)$(LD) $(LDFLAGS) --output='$@' $(call OBJFILES, $(call SRCFILES, $(CORE_SRCDIR))) \
-	-Wl,--start-group,--whole-archive $(LIBCORE_DEPENDENCIES) $(LIBCORE_STATIC) -Wl,--no-whole-archive,--end-group -lresolv -lrt -ldl -lpthread
-
-# Create the static libcore archive
+# Create the static libcore archive.
 $(LIBCORE_STATIC): $(LIBCORE_DEPENDENCIES) $(call OBJFILES, $(filter-out $(LIBCORE_FILTERED), $(call SRCFILES, $(LIBCORE_SRCDIR))))
 ifeq ($(VERBOSE),no)
 	@echo 'Constructing' $(RED)$@$(NORMAL)
+	$(RUN)$(AR) $(ARFLAGS) '$@' $(call OBJFILES, $(filter-out $(LIBCORE_FILTERED), $(call SRCFILES, $(LIBCORE_SRCDIR)))) &> /dev/null
 else
 	@echo
-endif
 	$(RUN)$(AR) $(ARFLAGS) '$@' $(call OBJFILES, $(filter-out $(LIBCORE_FILTERED), $(call SRCFILES, $(LIBCORE_SRCDIR))))
+endif
 
-# Create the libcore shared object
+# Create the libcore shared object.
 $(LIBCORE_SHARED): $(LIBCORE_DEPENDENCIES) $(call OBJFILES, $(filter-out $(LIBCORE_FILTERED), $(call SRCFILES, $(LIBCORE_SRCDIR))))
 ifeq ($(VERBOSE),no)
 	@echo 'Constructing' $(RED)$@$(NORMAL)
 else
 	@echo
 endif
-	$(RUN)$(LD) $(LDFLAGS) -o '$@' -shared $(call OBJFILES, $(filter-out $(LIBCORE_FILTERED), $(call SRCFILES, $(LIBCORE_SRCDIR)))) \
+	$(RUN)$(LD) $(LDFLAGS_COMBINED) -o '$@' -shared $(call OBJFILES, $(filter-out $(LIBCORE_FILTERED), $(call SRCFILES, $(LIBCORE_SRCDIR)))) \
 	-ggdb3 -fPIC -Wl,-Bsymbolic,--start-group,--whole-archive $(LIBCORE_DEPENDENCIES) -Wl,--no-whole-archive,--end-group -lresolv -lrt -ldl -lpthread
 
 # Compile Source
@@ -249,7 +292,7 @@ ifeq ($(VERBOSE),no)
 endif
 	@test -d $(DEPDIR)/$(dir $<) || $(MKDIR) $(DEPDIR)/$(dir $<)
 	@test -d $(OBJDIR)/$(dir $<) || $(MKDIR) $(OBJDIR)/$(dir $<)
-	$(RUN)$(CC) $(CFLAGS) $(CFLAGS.$(<F)) $(DEFINES) $(DEFINES.$(<F)) $(INCLUDES) -MF"$(<:%.c=$(DEPDIR)/%.d)" -MT"$@" -o"$@" "$<"
+	$(RUN)$(CC) $(DEFINES) $(CFLAGS_COMBINED) $(CFLAGS.$(<F)) $(DEFINES.$(<F)) $(INCLUDES) -MF"$(<:%.c=$(DEPDIR)/%.d)" -MT"$@" -o"$@" "$<"
 
 $(OBJDIR)/check/%.o: check/%.c
 ifeq ($(VERBOSE),no)
@@ -257,7 +300,7 @@ ifeq ($(VERBOSE),no)
 endif
 	@test -d $(DEPDIR)/$(dir $<) || $(MKDIR) $(DEPDIR)/$(dir $<)
 	@test -d $(OBJDIR)/$(dir $<) || $(MKDIR) $(OBJDIR)/$(dir $<)
-	$(RUN)$(CC) $(CFLAGS) $(CFLAGS.$(<F)) $(DEFINES) $(DEFINES.$(<F)) $(INCLUDES) -MF"$(<:%.c=$(DEPDIR)/%.d)" -MT"$@" -o"$@" "$<"
+	$(RUN)$(CC) $(DEFINES) $(CFLAGS_COMBINED) $(CFLAGS.$(<F)) $(DEFINES.$(<F)) $(INCLUDES) -MF"$(<:%.c=$(DEPDIR)/%.d)" -MT"$@" -o"$@" "$<"
 
 $(OBJDIR)/%.o: %.cpp
 ifeq ($(VERBOSE),no)
@@ -265,7 +308,7 @@ ifeq ($(VERBOSE),no)
 endif
 	@test -d $(DEPDIR)/$(dir $<) || $(MKDIR) $(DEPDIR)/$(dir $<)
 	@test -d $(OBJDIR)/$(dir $<) || $(MKDIR) $(OBJDIR)/$(dir $<)
-	$(RUN)$(CPP) $(CPPFLAGS) $(CPPFLAGS.$(<F)) $(DEFINES) $(DEFINES.$(<F)) $(INCLUDES) $(LIBCORE_CHECK_INCLUDES) -MF"$(<:%.cpp=$(DEPDIR)/%.d)" -MD -MP  -MT"$@" -c -o"$@" "$<"
+	$(RUN)$(CPP) $(DEFINES) $(CPPFLAGS_COMBINED) $(CPPFLAGS.$(<F)) $(DEFINES.$(<F)) $(INCLUDES) $(LIBCORE_CHECK_INCLUDES) -MF"$(<:%.cpp=$(DEPDIR)/%.d)" -MD -MP  -MT"$@" -c -o"$@" "$<"
 
 # If we've already generated dependency files, use them to see if a rebuild is required
 -include $(LIBCORE_DEPFILES)
