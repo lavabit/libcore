@@ -182,7 +182,14 @@ else
   EXEEXT                   :=
 endif
 
-all: config warning $(LIBCORE_SHARED) $(LIBCORE_STATIC) $(LIBCORE_PROGRAMS) $(LIBCORE_STRIPPED) $(LIBCORE_CHECK_PROGRAM) finished
+# We only build the unit tests as part of 'all' if libcheck is installed.
+ifeq ($(shell pkg-config --silence-errors --atleast-version=0.9.8 check && echo 1),1)
+ALL = $(LIBCORE_SHARED) $(LIBCORE_STATIC) $(LIBCORE_PROGRAMS) $(LIBCORE_STRIPPED) $(LIBCORE_CHECK_PROGRAM)
+else
+ALL = $(LIBCORE_SHARED) $(LIBCORE_STATIC) $(LIBCORE_PROGRAMS) $(LIBCORE_STRIPPED)
+endif
+
+all: config warning $(ALL) finished
 
 stripped: config warning $(LIBCORE_STRIPPED) finished
 
