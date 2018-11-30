@@ -52,8 +52,6 @@ START_TEST (check_compare) {
 	log_disable();
 	stringer_t *errmsg = NULL;
 
-	log_unit("%-64.64s", "CORE / STRINGS / COMPARE / SINGLE THREADED:");
-
 	if (st_cmp_cs_eq(NULLER(type(M_TYPE_MULTI)), CONSTANT("M_TYPE_MULTI")))
 		errmsg = NULLER("type() did not return M_TYPE_MULTI");
 
@@ -102,12 +100,11 @@ START_TEST (check_inx_linked_s) {
 
 	log_disable();
 	char *errmsg = NULL;
-	bool_t outcome = true;
 
-	outcome = check_indexes_linked_simple(&errmsg);
+	check_indexes_linked_simple(&errmsg);
 
 	log_test("CORE / INDEX / LINKED / SINGLE THREADED:", NULLER(errmsg));
-	ck_assert_msg(outcome, errmsg);
+	ck_assert_msg(!errmsg, errmsg);
 }
 END_TEST
 

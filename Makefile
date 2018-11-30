@@ -182,7 +182,7 @@ else
   EXEEXT                   :=
 endif
 
-all: config warning $(LIBCORE_SHARED) $(LIBCORE_STATIC) $(LIBCORE_PROGRAMS) $(LIBCORE_STRIPPED) finished
+all: config warning $(LIBCORE_SHARED) $(LIBCORE_STATIC) $(LIBCORE_PROGRAMS) $(LIBCORE_STRIPPED) $(LIBCORE_CHECK_PROGRAM) finished
 
 stripped: config warning $(LIBCORE_STRIPPED) finished
 

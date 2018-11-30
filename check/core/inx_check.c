@@ -248,19 +248,17 @@ bool_t check_inx_append_sthread(MAGMA_INDEX inx_type, stringer_t *errmsg) {
 		st_sprint(errmsg, "An error occured during initial allocation in the inx check append single-threaded test.");
 		outcome = false;
 	}
-	else if (outcome && !check_inx_append_helper(inx)) {
+	else if(!check_inx_append_helper(inx)) {
 		st_sprint(errmsg, "An error occured inside append test helper.");
 		outcome = false;
 	}
-	else if (outcome && inx_count(inx) != 0) {
-		st_sprint(errmsg, "The index was not properly cleared after the append operation.");
+
+	if (inx_count(inx) != 0 && outcome) {
+		st_sprint(errmsg, "The index was not properly cleared.");
 		outcome = false;
 	}
 
-	if (inx) {
-		inx_cleanup(inx);
-	}
-
+	inx_cleanup(inx);
 	return outcome;
 }
 
