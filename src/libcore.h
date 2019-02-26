@@ -49,7 +49,7 @@
 #include <semaphore.h>
 #include <sys/mman.h>
 
-#if defined(linux) || defined(__linux) || defined(__linux__)
+#if (__linux__ && __GLIBC__) || __APPLE__
 #include <execinfo.h>
 #endif
 
