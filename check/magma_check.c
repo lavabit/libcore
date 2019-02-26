@@ -125,6 +125,7 @@ int main(int argc, char *argv[]) {
 	// Setup
 	prog_start = time(NULL);
 
+#if defined(__GNU_LIBRARY__)
 	printf("-------------------------------- VERSIONS --------------------------------\n\n" \
 		"%-10.10s %63.63s\n%-10.10s %63.63s\n%-10.10s %63.63s\n\n" \
 		"%-10.10s %63.63s\n%-10.10s %63.63s\n%-10.10s %63.63s\n\n",
@@ -134,6 +135,19 @@ int main(int argc, char *argv[]) {
 		"PLATFORM:", st_char_get(host_platform(MANAGEDBUF(128))),
 		"KERNEL:", st_char_get(host_version(MANAGEDBUF(128))),
 		"GLIBC:", gnu_get_libc_version());
+#else
+  printf("-------------------------------- VERSIONS --------------------------------\n\n" \
+    "%-10.10s %63.63s\n%-10.10s %63.63s\n%-10.10s %63.63s\n\n" \
+    "%-10.10s %63.63s\n%-10.10s %63.63s\n%-10.10s %63.63s\n\n",
+    "CORE:", build_version(),
+    "COMMIT:", build_commit(),
+    "TIMESTAMP:", build_stamp(),
+    "PLATFORM:", st_char_get(host_platform(MANAGEDBUF(128))),
+    "KERNEL:", st_char_get(host_version(MANAGEDBUF(128))));
+#endif
+
+	// Flush the buffer to prevent the version information from being printed twice.
+  fflush(stdout);
 
 	// Initialize the secure memory module.
 	if (!mm_sec_start()) {

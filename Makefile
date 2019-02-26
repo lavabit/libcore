@@ -194,7 +194,7 @@ all: config warning $(ALL) finished
 stripped: config warning $(LIBCORE_STRIPPED) finished
 
 check: config warning $(LIBCORE_CHECK_PROGRAM)
-	@./core.check
+	@./$(LIBCORE_CHECK_PROGRAM)
 ifeq ($(VERBOSE),no)
 	@echo 'Finished' $(BOLD)$(GREEN)$(TARGETGOAL)$(NORMAL)
 endif

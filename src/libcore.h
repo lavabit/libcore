@@ -29,7 +29,6 @@
 #include <pthread.h>
 #include <stdarg.h>
 #include <dlfcn.h>
-#include <execinfo.h>
 #include <stdbool.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -39,7 +38,6 @@
 #include <sys/utsname.h>
 #include <sys/prctl.h>
 #include <sys/epoll.h>
-#include <sys/sysctl.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <arpa/nameser.h>
@@ -51,8 +49,9 @@
 #include <semaphore.h>
 #include <sys/mman.h>
 
-// GNU C Library
-#include <gnu/libc-version.h>
+#if defined(linux) || defined(__linux) || defined(__linux__)
+#include <execinfo.h>
+#endif
 
 #include "core/core.h"
 

@@ -14,6 +14,7 @@
  */
 int_t backtrace_print(void) {
 
+#if defined(linux) || defined(__linux) || defined(__linux__)
 	int_t pipefds[2];
 	char strbuf[1024];
 	void *buffer[1024];
@@ -69,4 +70,8 @@ int_t backtrace_print(void) {
 	close(pipefds[1]);
 
 	return result;
+#else
+	return 0;
+#endif
+
 }

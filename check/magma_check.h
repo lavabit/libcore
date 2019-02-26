@@ -16,6 +16,11 @@
 #include <check.h>
 #include <valgrind/valgrind.h>
 
+// GNU C Library
+#ifdef __GNU_LIBRARY__
+#include <gnu/libc-version.h>
+#endif
+
 #include "core/core_check.h"
 
 extern int case_timeout;
