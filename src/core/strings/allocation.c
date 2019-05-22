@@ -785,7 +785,7 @@ stringer_t * st_realloc(stringer_t *s, size_t len) {
 				getrlimit64(RLIMIT_MEMLOCK, &limits);
 				if ((((mapped_t *)s)->opts & SECURE) && errno == EAGAIN && (limits.rlim_cur < len ||
 						limits.rlim_cur < (len + CORE_SECURE_MEMORY_LENGTH))) {
-				  cur = (uint64_t)limits.rlim_cur;
+					cur = (uint64_t)limits.rlim_cur;
 					log_pedantic("Unable to resize the secure memory mapped buffer, the requested size exceeds the system limit for locked pages. " \
 							"{ limit = %lu / requested = %zu }", cur, len);
 				}
