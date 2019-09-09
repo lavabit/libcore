@@ -1,0 +1,283 @@
+[root@centos7 libcore]# ls
+check  check.h  libcore.a  libcore.so  libcore-stripped.a  libcore-stripped.so  LICENSE  Makefile  README.md  src
+[root@centos7 libcore]# flawfinder .
+Flawfinder version 2.0.10, (C) 2001-2019 David A. Wheeler.
+Number of rules (primarily dangerous function names) in C/C++ ruleset: 223
+Warning: Skipping directory with initial dot ./.git
+Examining ./check/core/base64_check.c
+Examining ./check/core/bitwise_check.c
+Examining ./check/core/checksum_check.c
+Examining ./check/core/clamp_check.c
+Examining ./check/core/core_check.c
+Examining ./check/core/core_check.h
+Examining ./check/core/hashed_check.c
+Examining ./check/core/hex_check.c
+Examining ./check/core/inx_check.c
+Examining ./check/core/ip_check.c
+Examining ./check/core/linked_check.c
+Examining ./check/core/nbo_check.c
+Examining ./check/core/qp_check.c
+Examining ./check/core/qsort_check.c
+Examining ./check/core/string_check.c
+Examining ./check/core/system_check.c
+Examining ./check/core/tree_check.c
+Examining ./check/core/url_check.c
+Examining ./check/core/zbase32_check.c
+Examining ./check/magma_check.c
+Examining ./check/magma_check.h
+Examining ./check/sample_check.c
+Examining ./src/build.c
+Examining ./src/core/buckets/arrays.c
+Examining ./src/core/buckets/buckets.h
+Examining ./src/core/buckets/pool.c
+Examining ./src/core/buckets/stacked.c
+Examining ./src/core/checksum/adler.c
+Examining ./src/core/checksum/checksum.h
+Examining ./src/core/checksum/crc.c
+Examining ./src/core/checksum/fletcher.c
+Examining ./src/core/checksum/murmur.c
+Examining ./src/core/classify/ascii.c
+Examining ./src/core/classify/classify.h
+Examining ./src/core/compare/compare.h
+Examining ./src/core/compare/ends.c
+Examining ./src/core/compare/equal.c
+Examining ./src/core/compare/search.c
+Examining ./src/core/compare/starts.c
+Examining ./src/core/core.h
+Examining ./src/core/encodings/base64.c
+Examining ./src/core/encodings/encodings.h
+Examining ./src/core/encodings/hex.c
+Examining ./src/core/encodings/mappings.c
+Examining ./src/core/encodings/qp.c
+Examining ./src/core/encodings/url.c
+Examining ./src/core/encodings/zbase32.c
+Examining ./src/core/host/backtrace.c
+Examining ./src/core/host/color.c
+Examining ./src/core/host/errors.c
+Examining ./src/core/host/files.c
+Examining ./src/core/host/folder.c
+Examining ./src/core/host/host.c
+Examining ./src/core/host/host.h
+Examining ./src/core/host/ip.c
+Examining ./src/core/host/process.c
+Examining ./src/core/host/signals.c
+Examining ./src/core/host/spool.c
+Examining ./src/core/host/tcp.c
+Examining ./src/core/indexes/cursors.c
+Examining ./src/core/indexes/hashed.c
+Examining ./src/core/indexes/indexes.h
+Examining ./src/core/indexes/inx.c
+Examining ./src/core/indexes/linked.c
+Examining ./src/core/memory/align.c
+Examining ./src/core/memory/bitwise.c
+Examining ./src/core/memory/memory.c
+Examining ./src/core/memory/memory.h
+Examining ./src/core/memory/secure.c
+Examining ./src/core/parsers/bitwise.c
+Examining ./src/core/parsers/case.c
+Examining ./src/core/parsers/formats/formats.h
+Examining ./src/core/parsers/formats/nvp.c
+Examining ./src/core/parsers/line.c
+Examining ./src/core/parsers/numbers/clamp.c
+Examining ./src/core/parsers/numbers/digits.c
+Examining ./src/core/parsers/numbers/numbers.c
+Examining ./src/core/parsers/numbers/numbers.h
+Examining ./src/core/parsers/parsers.h
+Examining ./src/core/parsers/special/bracket.c
+Examining ./src/core/parsers/special/special.h
+Examining ./src/core/parsers/time.c
+Examining ./src/core/parsers/token.c
+Examining ./src/core/parsers/trim.c
+Examining ./src/core/strings/allocation.c
+Examining ./src/core/strings/data.c
+Examining ./src/core/strings/info.c
+Examining ./src/core/strings/length.c
+Examining ./src/core/strings/multi.c
+Examining ./src/core/strings/nuller.c
+Examining ./src/core/strings/opts.c
+Examining ./src/core/strings/print.c
+Examining ./src/core/strings/replace.c
+Examining ./src/core/strings/shortcuts.c
+Examining ./src/core/strings/strings.h
+Examining ./src/core/strings/validate.c
+Examining ./src/core/thread/keys.c
+Examining ./src/core/thread/mutex.c
+Examining ./src/core/thread/rwlock.c
+Examining ./src/core/thread/thread.c
+Examining ./src/core/thread/thread.h
+Examining ./src/core/type.c
+Examining ./src/libcore.h
+Examining ./src/log.c
+Examining ./src/magma.h
+Examining ./src/random.c
+Warning: Skipping directory with initial dot ./.deps
+Warning: Skipping directory with initial dot ./.objs
+Examining ./check.h
+
+FINAL RESULTS:
+
+./check/magma_check.c:33:  [4] (format) vfprintf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/core.h:188:  [4] (format) printf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/core.h:190:  [4] (format) printf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/core.h:191:  [4] (format) printf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/core.h:192:  [4] (format) printf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/core.h:193:  [4] (format) printf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/host/color.c:22:  [4] (shell) system:
+  This causes a new program to execute and is difficult to use safely
+  (CWE-78). try using a library call that implements the same functionality
+  if available.
+./src/core/host/files.c:157:  [4] (race) access:
+  This usually indicates a security flaw. If an attacker can change anything
+  along the path between the call to access() and the file's actual use
+  (e.g., by moving files), the attacker can exploit the race condition
+  (CWE-362/CWE-367!). Set up the correct permissions (e.g., using setuid())
+  and try to open the file directly.
+./src/core/host/files.c:167:  [4] (race) access:
+  This usually indicates a security flaw. If an attacker can change anything
+  along the path between the call to access() and the file's actual use
+  (e.g., by moving files), the attacker can exploit the race condition
+  (CWE-362/CWE-367!). Set up the correct permissions (e.g., using setuid())
+  and try to open the file directly.
+./src/core/strings/print.c:34:  [4] (format) vsnprintf:
+  If format strings can be influenced by an attacker, they can be exploited,
+  and note that sprintf variations do not always \0-terminate (CWE-134). Use
+  a constant for the format specification.
+./src/core/strings/print.c:39:  [4] (format) vsnprintf:
+  If format strings can be influenced by an attacker, they can be exploited,
+  and note that sprintf variations do not always \0-terminate (CWE-134). Use
+  a constant for the format specification.
+./src/core/strings/print.c:116:  [4] (format) vsnprintf:
+  If format strings can be influenced by an attacker, they can be exploited,
+  and note that sprintf variations do not always \0-terminate (CWE-134). Use
+  a constant for the format specification.
+./src/core/strings/print.c:125:  [4] (format) vsnprintf:
+  If format strings can be influenced by an attacker, they can be exploited,
+  and note that sprintf variations do not always \0-terminate (CWE-134). Use
+  a constant for the format specification.
+./src/core/strings/strings.h:169:  [4] (format) printf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/strings/strings.h:170:  [4] (format) printf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/strings/strings.h:171:  [4] (format) printf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/strings/strings.h:172:  [4] (format) printf:
+  If format strings can be influenced by an attacker, they can be exploited
+  (CWE-134). Use a constant for the format specification.
+./src/core/thread/thread.c:37:  [4] (shell) system:
+  This causes a new program to execute and is difficult to use safely
+  (CWE-78). try using a library call that implements the same functionality
+  if available.
+./src/core/host/color.c:12:  [3] (buffer) getenv:
+  Environment variables are untrustable input if they can be set by an
+  attacker. They can have any content and length, and the same variable can
+  be set more than once (CWE-807, CWE-20). Check environment variables
+  carefully before using them.
+./src/random.c:185:  [3] (random) srand:
+  This function is not sufficiently random for security-related functions
+  such as key and nonce creation (CWE-327). Use a more secure technique for
+  acquiring random values.
+./check/core/core_check.c:519:  [2] (buffer) char:
+  Statically-sized arrays can be improperly restricted, leading to potential
+  overflows or other issues (CWE-119!/CWE-120). Perform bounds checking, use
+  functions that limit length, or ensure that the size is larger than the
+  maximum possible length.
+./check/core/hashed_check.c:132:  [2] (buffer) char:
+  Statically-sized arrays can be improperly restricted, leading to potential
+  overflows or other issues (CWE-119!/CWE-120). Perform bounds checking, use
+  functions that limit length, or ensure that the size is larger than the
+  maximum possible length.
+./check/core/inx_check.c:50:  [2] (buffer) char:
+  Statically-sized arrays can be improperly restricted, leading to potential
+  overflows or other issues (CWE-119!/CWE-120). Perform bounds checking, use
+  functions that limit length, or ensure that the size is larger than the
+  maximum possible length.
+./check/core/linked_check.c:133:  [2] (buffer) char:
+  Statically-sized arrays can be improperly restricted, leading to potential
+  overflows or other issues (CWE-119!/CWE-120). Perform bounds checking, use
+  functions that limit length, or ensure that the size is larger than the
+  maximum possible length.
+./check/core/tree_check.c:133:  [2] (buffer) char:
+  Statically-sized arrays can be improperly restricted, leading to potential
+  overflows or other issues (CWE-119!/CWE-120). Perform bounds checking, use
+  functions that limit length, or ensure that the size is larger than the
+  maximum possible length.
+./src/core/host/backtrace.c:19:  [2] (buffer) char:
+  Statically-sized arrays can be improperly restricted, leading to potential
+  overflows or other issues (CWE-119!/CWE-120). Perform bounds checking, use
+  functions that limit length, or ensure that the size is larger than the
+  maximum possible length.
+./src/core/host/files.c:28:  [2] (misc) open:
+  Check when opening files - can an attacker redirect it (via symlinks),
+  force the opening of special file type (e.g., device files), move things
+  around to create a race condition, control its ancestors, or change its
+  contents? (CWE-362).
+./src/core/host/files.c:56:  [2] (buffer) char:
+  Statically-sized arrays can be improperly restricted, leading to potential
+  overflows or other issues (CWE-119!/CWE-120). Perform bounds checking, use
+  functions that limit length, or ensure that the size is larger than the
+  maximum possible length.
+./src/core/host/files.c:59:  [2] (misc) open:
+  Check when opening files - can an attacker redirect it (via symlinks),
+  force the opening of special file type (e.g., device files), move things
+  around to create a race condition, control its ancestors, or change its
+  contents? (CWE-362).
+./src/core/host/files.c:135:  [2] (tmpfile) mkstemp:
+  Potential for temporary file vulnerability in some circumstances. Some
+  older Unix-like systems create temp files with permission to write by all
+  by default, so be sure to set the umask to override this. Also, some older
+  Unix systems might fail to use O_EXCL when opening the file, so make sure
+  that O_EXCL is used by the library (CWE-377).
+./src/core/host/ip.c:536:  [2] (buffer) memcpy:
+  Does not check for buffer overflows when copying to destination (CWE-120).
+  Make sure destination can always hold the source data.
+./src/core/host/ip.c:544:  [2] (buffer) memcpy:
+  Does not check for buffer overflows when copying to destination (CWE-120).
+  Make sure destination can always hold the source data.
+./src/core/memory/memory.c:61:  [2] (buffer) memcpy:
+  Does not check for buffer overflows when copying to destination (CWE-120).
+  Make sure destination can always hold the source data.
+./src/libcore.h:64:  [2] (buffer) char:
+  Statically-sized arrays can be improperly restricted, leading to potential
+  overflows or other issues (CWE-119!/CWE-120). Perform bounds checking, use
+  functions that limit length, or ensure that the size is larger than the
+  maximum possible length.
+./src/core/host/backtrace.c:41:  [1] (buffer) read:
+  Check buffer boundaries if used in a loop including recursive loops
+  (CWE-120, CWE-20).
+./src/core/host/files.c:35:  [1] (buffer) read:
+  Check buffer boundaries if used in a loop including recursive loops
+  (CWE-120, CWE-20).
+./src/core/host/files.c:79:  [1] (buffer) read:
+  Check buffer boundaries if used in a loop including recursive loops
+  (CWE-120, CWE-20).
+
+ANALYSIS SUMMARY:
+
+Hits = 37
+Lines analyzed = 22357 in approximately 0.34 seconds (65082 lines/second)
+Physical Source Lines of Code (SLOC) = 14150
+Hits@level = [0]  36 [1]   3 [2]  14 [3]   2 [4]  18 [5]   0
+Hits@level+ = [0+]  73 [1+]  37 [2+]  34 [3+]  20 [4+]  18 [5+]   0
+Hits/KSLOC@level+ = [0+] 5.15901 [1+] 2.61484 [2+] 2.40283 [3+] 1.41343 [4+] 1.27208 [5+]   0
+Dot directories skipped = 3 (--followdotdir overrides)
+Minimum risk level = 1
+Not every hit is necessarily a security vulnerability.
+There may be other security vulnerabilities; review your code!
+See 'Secure Programming HOWTO'
+(https://dwheeler.com/secure-programs) for more information.
+
