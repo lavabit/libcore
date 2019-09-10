@@ -14,6 +14,13 @@ PACKAGE_URL				= https://lavabit.com
 
 TOPDIR					= $(realpath .)
 
+#  Makefile:15:  [3] (buffer) realpath:
+#  This function does not protect against buffer overflows, and some
+#  implementations can overflow internally (CWE-120/CWE-785!). Ensure that the
+#  destination buffer is at least of size MAXPATHLEN, andto protect against
+#  implementation problems, the input argument should also be checked to
+#  ensure it is no larger than MAXPATHLEN.
+
 LIBCORE_CHECK_SRCDIR	= check
 LIBCORE_CHECK_PROGRAM	= core.check$(EXEEXT)
 LIBCORE_CHECK_INCLUDES	= -Icheck -Isrc/core
