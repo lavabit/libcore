@@ -121,6 +121,7 @@ CPPFLAGS_COMBINED		= -std=c++0x $(CPPFLAGS_WARNINGS) -Wno-unused-parameter -pthr
 # Linker Options
 LDFLAGS                      ?=
 LDFLAGS_COMBINED              = -rdynamic $(LDFLAGS)
+LDFLAGS_CHECK                 = $(shell pkg-config --libs check 2>/dev/null || echo "-lcheck")
 
 # Archiver Options
 ARFLAGS                      ?= rcs
@@ -279,7 +280,7 @@ endif
 	$(RUN)$(LD) $(LDFLAGS_COMBINED) --output='$@' $(call OBJFILES, $(call CPPFILES, $(LIBCORE_CHECK_SRCDIR))) \
 	 $(call OBJFILES, $(call CCFILES, $(LIBCORE_CHECK_SRCDIR))) $(call OBJFILES, $(call SRCFILES, $(LIBCORE_CHECK_SRCDIR))) \
 	-Wl,--start-group,--whole-archive $(LIBCORE_DEPENDENCIES) $(LIBCORE_STATIC) $(CORE_CHECK_GTEST) -Wl,--no-whole-archive,--end-group \
-	-lresolv -ldl -lstdc++ -lpthread -lcheck -lm -lrt 
+	-lresolv -ldl -lstdc++ -lpthread -lm -lrt $(LDFLAGS_CHECK)
 
 # Create the static libcore archive.
 $(LIBCORE_STATIC): $(LIBCORE_DEPENDENCIES) $(call OBJFILES, $(filter-out $(LIBCORE_FILTERED), $(call SRCFILES, $(LIBCORE_SRCDIR))))
